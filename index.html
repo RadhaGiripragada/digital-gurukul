@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LingoLearn - Language Learning App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .app-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .language-selector {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        select {
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        select:hover {
+            border-color: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        .lesson-area {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .word-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .word-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .foreign-word {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .pronunciation {
+            font-size: 1.2em;
+            opacity: 0.9;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .english-word {
+            font-size: 1.5em;
+            margin-top: 20px;
+            opacity: 0.9;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            color: #333;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #333;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .quiz-area {
+            margin-top: 30px;
+            padding: 30px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 15px;
+            border: 2px dashed #667eea;
+        }
+
+        .quiz-question {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00f5a0 0%, #00d9f5 100%);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            display: block;
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feedback.show {
+            opacity: 1;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .app-card {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .foreign-word {
+                font-size: 2em;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌍 LingoLearn</h1>
+            <p class="subtitle">Master new languages one word at a time</p>
+        </header>
+
+        <div class="app-card">
+            <div class="language-selector">
+                <label for="language">Choose your language:</label><br><br>
+                <select id="language">
+                    <option value="telugu">🇮🇳 Telugu</option>
+                    <option value="sanskrit">🕉️ Sanskrit</option>
+                    <option value="spanish">🇪🇸 Spanish</option>
+                    <option value="french">🇫🇷 French</option>
+                    <option value="german">🇩🇪 German</option>
+                    <option value="italian">🇮🇹 Italian</option>
+                    <option value="portuguese">🇵🇹 Portuguese</option>
+                </select>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+
+            <div class="lesson-area">
+                <div class="word-card" id="wordCard">
+                    <div class="foreign-word" id="foreignWord">నమస్కారం</div>
+                    <div class="pronunciation" id="pronunciation">[na-mas-kaa-ram]</div>
+                    <div class="english-word" id="englishWord" style="display: none;">Hello/Greetings</div>
+                </div>
+
+                <div class="controls">
+                    <button class="btn-primary" onclick="speakWord()">🔊 Listen</button>
+                    <button class="btn-secondary" onclick="showTranslation()">👁️ Show Translation</button>
+                    <button class="btn-success" onclick="nextWord()">➡️ Next Word</button>
+                </div>
+            </div>
+
+            <div class="quiz-area" id="quizArea" style="display: none;">
+                <div class="quiz-question" id="quizQuestion">What does "Hola" mean in English?</div>
+                <input type="text" id="answerInput" placeholder="Type your answer here...">
+                <button class="btn-primary" onclick="checkAnswer()">Check Answer</button>
+                <div class="feedback" id="feedback"></div>
+            </div>
+
+            <div class="controls">
+                <button class="btn-secondary" onclick="toggleQuiz()">🧠 Quiz Mode</button>
+                <button class="btn-primary" onclick="resetProgress()">🔄 Reset Progress</button>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <span class="stat-number" id="wordsLearned">0</span>
+                    <span>Words Learned</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="correctAnswers">0</span>
+                    <span>Correct Answers</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="streak">0</span>
+                    <span>Current Streak</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const vocabularyData = {
+            telugu: [
+                {word: "నమస్కారం", pronunciation: "[na-mas-kaa-ram]", translation: "Hello/Greetings", category: "greetings"},
+                {word: "ధన్యవాదాలు", pronunciation: "[dhan-ya-vaa-daa-lu]", translation: "Thank you", category: "politeness"},
+                {word: "వీడ్కోలు", pronunciation: "[veed-ko-lu]", translation: "Goodbye", category: "greetings"},
+                {word: "దయచేసి", pronunciation: "[da-ya-chey-si]", translation: "Please", category: "politeness"},
+                {word: "క్షమించండి", pronunciation: "[ksha-min-chan-di]", translation: "Sorry/Excuse me", category: "politeness"},
+                {word: "నీళ్లు", pronunciation: "[neel-lu]", translation: "Water", category: "food"},
+                {word: "ఇల్లు", pronunciation: "[il-lu]", translation: "House", category: "places"},
+                {word: "ప్రేమ", pronunciation: "[prey-ma]", translation: "Love", category: "emotions"},
+                {word: "సమయం", pronunciation: "[sa-ma-yam]", translation: "Time", category: "concepts"},
+                {word: "కుటుంబం", pronunciation: "[ku-tum-bam]", translation: "Family", category: "people"}
+            ],
+            sanskrit: [
+                {word: "नमस्ते", pronunciation: "[na-mas-te]", translation: "Hello/Greetings", category: "greetings"},
+                {word: "धन्यवाद", pronunciation: "[dhan-ya-vaad]", translation: "Thank you", category: "politeness"},
+                {word: "शुभविदा", pronunciation: "[shubh-vi-daa]", translation: "Farewell", category: "greetings"},
+                {word: "कृपया", pronunciation: "[kri-pa-yaa]", translation: "Please", category: "politeness"},
+                {word: "क्षमा", pronunciation: "[ksha-maa]", translation: "Forgiveness/Sorry", category: "politeness"},
+                {word: "जल", pronunciation: "[ja-la]", translation: "Water", category: "elements"},
+                {word: "गृह", pronunciation: "[gri-ha]", translation: "House", category: "places"},
+                {word: "प्रेम", pronunciation: "[pre-ma]", translation: "Love", category: "emotions"},
+                {word: "काल", pronunciation: "[kaa-la]", translation: "Time", category: "concepts"},
+                {word: "कुल", pronunciation: "[ku-la]", translation: "Family", category: "people"}
+            ],
+            spanish: [
+                {word: "¡Hola!", pronunciation: "[OH-lah]", translation: "Hello!", category: "greetings"},
+                {word: "Gracias", pronunciation: "[GRAH-see-ahs]", translation: "Thank you", category: "politeness"},
+                {word: "Adiós", pronunciation: "[ah-dee-OHS]", translation: "Goodbye", category: "greetings"},
+                {word: "Por favor", pronunciation: "[por fah-VOR]", translation: "Please", category: "politeness"},
+                {word: "Lo siento", pronunciation: "[loh see-EN-toh]", translation: "I'm sorry", category: "politeness"},
+                {word: "Agua", pronunciation: "[AH-gwah]", translation: "Water", category: "food"},
+                {word: "Casa", pronunciation: "[KAH-sah]", translation: "House", category: "places"},
+                {word: "Amor", pronunciation: "[ah-MOR]", translation: "Love", category: "emotions"},
+                {word: "Tiempo", pronunciation: "[tee-EM-poh]", translation: "Time", category: "concepts"},
+                {word: "Familia", pronunciation: "[fah-MEE-lee-ah]", translation: "Family", category: "people"}
+            ],
+            french: [
+                {word: "Bonjour", pronunciation: "[bon-ZHOOR]", translation: "Hello", category: "greetings"},
+                {word: "Merci", pronunciation: "[mer-SEE]", translation: "Thank you", category: "politeness"},
+                {word: "Au revoir", pronunciation: "[oh ruh-VWAR]", translation: "Goodbye", category: "greetings"},
+                {word: "S'il vous plaît", pronunciation: "[see voo PLAY]", translation: "Please", category: "politeness"},
+                {word: "Excusez-moi", pronunciation: "[ek-skew-zay MWAH]", translation: "Excuse me", category: "politeness"},
+                {word: "Eau", pronunciation: "[OH]", translation: "Water", category: "food"},
+                {word: "Maison", pronunciation: "[may-ZOHN]", translation: "House", category: "places"},
+                {word: "Amour", pronunciation: "[ah-MOOR]", translation: "Love", category: "emotions"},
+                {word: "Temps", pronunciation: "[TAHN]", translation: "Time", category: "concepts"},
+                {word: "Famille", pronunciation: "[fah-MEEL]", translation: "Family", category: "people"}
+            ],
+            german: [
+                {word: "Hallo", pronunciation: "[HAH-loh]", translation: "Hello", category: "greetings"},
+                {word: "Danke", pronunciation: "[DAHN-keh]", translation: "Thank you", category: "politeness"},
+                {word: "Auf Wiedersehen", pronunciation: "[owf VEE-der-zayn]", translation: "Goodbye", category: "greetings"},
+                {word: "Bitte", pronunciation: "[BIT-teh]", translation: "Please", category: "politeness"},
+                {word: "Entschuldigung", pronunciation: "[ent-SHOOL-dee-goong]", translation: "Excuse me", category: "politeness"},
+                {word: "Wasser", pronunciation: "[VAH-ser]", translation: "Water", category: "food"},
+                {word: "Haus", pronunciation: "[HOWS]", translation: "House", category: "places"},
+                {word: "Liebe", pronunciation: "[LEE-beh]", translation: "Love", category: "emotions"},
+                {word: "Zeit", pronunciation: "[TSYT]", translation: "Time", category: "concepts"},
+                {word: "Familie", pronunciation: "[fah-MEE-lee-eh]", translation: "Family", category: "people"}
+            ],
+            italian: [
+                {word: "Ciao", pronunciation: "[CHAH-oh]", translation: "Hello/Bye", category: "greetings"},
+                {word: "Grazie", pronunciation: "[GRAH-tsee-eh]", translation: "Thank you", category: "politeness"},
+                {word: "Arrivederci", pronunciation: "[ah-ree-veh-DER-chee]", translation: "Goodbye", category: "greetings"},
+                {word: "Per favore", pronunciation: "[per fah-VOH-reh]", translation: "Please", category: "politeness"},
+                {word: "Mi scusi", pronunciation: "[mee SKOO-zee]", translation: "Excuse me", category: "politeness"},
+                {word: "Acqua", pronunciation: "[AH-kwah]", translation: "Water", category: "food"},
+                {word: "Casa", pronunciation: "[KAH-sah]", translation: "House", category: "places"},
+                {word: "Amore", pronunciation: "[ah-MOH-reh]", translation: "Love", category: "emotions"},
+                {word: "Tempo", pronunciation: "[TEM-poh]", translation: "Time", category: "concepts"},
+                {word: "Famiglia", pronunciation: "[fah-MEE-lyah]", translation: "Family", category: "people"}
+            ],
+            portuguese: [
+                {word: "Olá", pronunciation: "[oh-LAH]", translation: "Hello", category: "greetings"},
+                {word: "Obrigado", pronunciation: "[oh-bree-GAH-doh]", translation: "Thank you", category: "politeness"},
+                {word: "Tchau", pronunciation: "[CHOW]", translation: "Goodbye", category: "greetings"},
+                {word: "Por favor", pronunciation: "[por fah-VOR]", translation: "Please", category: "politeness"},
+                {word: "Com licença", pronunciation: "[kom lee-SEN-sah]", translation: "Excuse me", category: "politeness"},
+                {word: "Água", pronunciation: "[AH-gwah]", translation: "Water", category: "food"},
+                {word: "Casa", pronunciation: "[KAH-sah]", translation: "House", category: "places"},
+                {word: "Amor", pronunciation: "[ah-MOR]", translation: "Love", category: "emotions"},
+                {word: "Tempo", pronunciation: "[TEM-poh]", translation: "Time", category: "concepts"},
+                {word: "Família", pronunciation: "[fah-MEE-lee-ah]", translation: "Family", category: "people"}
+            ]
+        };
+
+        let currentLanguage = 'telugu';
+        let currentWordIndex = 0;
+        let quizMode = false;
+        let stats = {
+            wordsLearned: 0,
+            correctAnswers: 0,
+            streak: 0
+        };
+
+        function getCurrentVocabulary() {
+            return vocabularyData[currentLanguage];
+        }
+
+        function getCurrentWord() {
+            return getCurrentVocabulary()[currentWordIndex];
+        }
+
+        function displayWord() {
+            const word = getCurrentWord();
+            document.getElementById('foreignWord').textContent = word.word;
+            document.getElementById('pronunciation').textContent = word.pronunciation;
+            document.getElementById('englishWord').textContent = word.translation;
+            document.getElementById('englishWord').style.display = 'none';
+            
+            // Update quiz question
+            document.getElementById('quizQuestion').textContent = `What does "${word.word}" mean in English?`;
+            document.getElementById('answerInput').value = '';
+            document.getElementById('feedback').classList.remove('show');
+        }
+
+        function showTranslation() {
+            document.getElementById('englishWord').style.display = 'block';
+        }
+
+        function nextWord() {
+            currentWordIndex = (currentWordIndex + 1) % getCurrentVocabulary().length;
+            displayWord();
+            updateProgress();
+            updateStats();
+        }
+
+        function speakWord() {
+            const word = getCurrentWord();
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(word.word);
+                
+                // Set language based on current selection
+                const languageCodes = {
+                    telugu: 'te-IN',
+                    sanskrit: 'hi-IN', // Using Hindi pronunciation as fallback for Sanskrit
+                    spanish: 'es-ES',
+                    french: 'fr-FR',
+                    german: 'de-DE',
+                    italian: 'it-IT',
+                    portuguese: 'pt-PT'
+                };
+                
+                utterance.lang = languageCodes[currentLanguage];
+                utterance.rate = 0.8;
+                speechSynthesis.speak(utterance);
+            } else {
+                alert('Speech synthesis not supported in this browser');
+            }
+        }
+
+        function toggleQuiz() {
+            quizMode = !quizMode;
+            const quizArea = document.getElementById('quizArea');
+            const lessonArea = document.querySelector('.lesson-area');
+            
+            if (quizMode) {
+                quizArea.style.display = 'block';
+                lessonArea.style.display = 'none';
+                document.querySelector('button[onclick="toggleQuiz()"]').textContent = '📖 Study Mode';
+            } else {
+                quizArea.style.display = 'none';
+                lessonArea.style.display = 'block';
+                document.querySelector('button[onclick="toggleQuiz()"]').textContent = '🧠 Quiz Mode';
+            }
+        }
+
+        function checkAnswer() {
+            const userAnswer = document.getElementById('answerInput').value.trim().toLowerCase();
+            const correctAnswer = getCurrentWord().translation.toLowerCase();
+            const feedback = document.getElementById('feedback');
+            
+            if (userAnswer === correctAnswer) {
+                feedback.textContent = '🎉 Correct! Great job!';
+                feedback.className = 'feedback correct show';
+                stats.correctAnswers++;
+                stats.streak++;
+            } else {
+                feedback.textContent = `❌ Not quite. The answer is: ${getCurrentWord().translation}`;
+                feedback.className = 'feedback incorrect show';
+                stats.streak = 0;
+            }
+            
+            updateStats();
+            setTimeout(() => {
+                nextWord();
+                feedback.classList.remove('show');
+            }, 2000);
+        }
+
+        function updateProgress() {
+            const progress = ((currentWordIndex + 1) / getCurrentVocabulary().length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function updateStats() {
+            stats.wordsLearned = Math.max(stats.wordsLearned, currentWordIndex + 1);
+            document.getElementById('wordsLearned').textContent = stats.wordsLearned;
+            document.getElementById('correctAnswers').textContent = stats.correctAnswers;
+            document.getElementById('streak').textContent = stats.streak;
+        }
+
+        function resetProgress() {
+            currentWordIndex = 0;
+            stats = { wordsLearned: 0, correctAnswers: 0, streak: 0 };
+            displayWord();
+            updateProgress();
+            updateStats();
+        }
+
+        // Language selector event
+        document.getElementById('language').addEventListener('change', function() {
+            currentLanguage = this.value;
+            currentWordIndex = 0;
+            displayWord();
+            updateProgress();
+        });
+
+        // Enter key support for quiz
+        document.getElementById('answerInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+
+        // Initialize app
+        displayWord();
+        updateProgress();
+        updateStats();
+    </script>
+</body>
+</html>
