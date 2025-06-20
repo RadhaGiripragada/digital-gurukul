@@ -303,10 +303,9 @@ select:focus {
     letter-spacing: 1px;
 }
 
-.next-word-btn {
+.next-word-btn, .prev-word-btn {
     position: absolute;
     bottom: 15px;
-    right: 15px;
     background: rgba(255,255,255,0.9);
     border: 2px solid #cd853f;
     color: #cd853f;
@@ -321,7 +320,15 @@ select:focus {
     justify-content: center;
 }
 
-.next-word-btn:hover {
+.next-word-btn {
+    right: 15px;
+}
+
+.prev-word-btn {
+    right: 75px;
+}
+
+.next-word-btn:hover, .prev-word-btn:hover {
     background: #cd853f;
     color: white;
     transform: scale(1.1);
@@ -687,6 +694,17 @@ input[type="text"]:focus {
         grid-template-columns: 1fr;
     }
 
-    .next-word-btn {
+    .next-word-btn, .prev-word-btn {
         bottom: 10px;
-        right: 10
+        width: 45px;
+        height: 45px;
+    }
+    
+    .next-word-btn {
+        right: 10px;
+    }
+    
+    .prev-word-btn {
+        right: 65px;
+    }
+}
