@@ -16,10 +16,31 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             color: #333;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background elements */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1" fill="rgba(255,255,255,0.15)"/><circle cx="40" cy="80" r="3" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="90" r="1.5" fill="rgba(255,255,255,0.12)"/></svg>');
+            animation: float 20s infinite linear;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
         }
 
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -28,26 +49,72 @@
             text-align: center;
             margin-bottom: 40px;
             color: white;
+            animation: slideInDown 0.8s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         h1 {
-            font-size: 3em;
+            font-size: 3.5em;
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #fff, #ffd700, #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
         }
 
         .subtitle {
-            font-size: 1.2em;
+            font-size: 1.3em;
             opacity: 0.9;
+            animation: fadeIn 1s ease-out 0.5s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 0.9; }
         }
 
         .app-card {
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
+            border-radius: 25px;
             padding: 40px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.3);
+            animation: slideInUp 0.8s ease-out 0.3s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        @keyframes slideInUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .language-selector {
@@ -55,19 +122,36 @@
             margin-bottom: 30px;
         }
 
+        .language-selector label {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 15px;
+            display: block;
+        }
+
         select {
-            padding: 12px 20px;
+            padding: 15px 25px;
             font-size: 16px;
-            border: 2px solid #667eea;
-            border-radius: 10px;
-            background: white;
+            border: 3px solid #667eea;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #fff 0%, #f8f9ff 100%);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
         }
 
         select:hover {
             border-color: #764ba2;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(118, 75, 162, 0.3);
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #f093fb;
+            box-shadow: 0 0 0 4px rgba(240, 147, 251, 0.2);
         }
 
         .lesson-area {
@@ -76,38 +160,98 @@
         }
 
         .word-card {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             color: white;
-            padding: 40px 20px;
-            border-radius: 15px;
+            padding: 50px 30px;
+            border-radius: 20px;
             margin: 20px 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
             transform: translateY(0);
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .word-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .word-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.3);
+        }
+
+        .word-card-content {
+            position: relative;
+            z-index: 2;
         }
 
         .foreign-word {
-            font-size: 2.5em;
+            font-size: 3em;
             font-weight: bold;
             margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .pronunciation {
-            font-size: 1.2em;
+            font-size: 1.4em;
             opacity: 0.9;
             font-style: italic;
             margin-bottom: 10px;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            backdrop-filter: blur(10px);
+        }
+
+        .phonetic-guide {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-top: 5px;
+            color: #ffd700;
         }
 
         .english-word {
-            font-size: 1.5em;
+            font-size: 1.6em;
             margin-top: 20px;
-            opacity: 0.9;
+            opacity: 0.95;
+            font-weight: 600;
+            padding: 15px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .word-category {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.3);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .controls {
@@ -119,152 +263,291 @@
         }
 
         button {
-            padding: 12px 25px;
+            padding: 15px 30px;
             font-size: 16px;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transition: all 0.4s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        button:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .btn-primary {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
         }
 
         .btn-secondary {
             background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
             color: #333;
+            box-shadow: 0 8px 20px rgba(252, 182, 159, 0.3);
         }
 
         .btn-success {
             background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
             color: #333;
+            box-shadow: 0 8px 20px rgba(168, 237, 234, 0.3);
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: #333;
+            box-shadow: 0 8px 20px rgba(255, 154, 158, 0.3);
         }
 
         button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        button:active {
+            transform: translateY(-2px);
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+            justify-content: center;
+        }
+
+        .speed-slider {
+            -webkit-appearance: none;
+            width: 150px;
+            height: 6px;
+            border-radius: 3px;
+            background: #ddd;
+            outline: none;
+        }
+
+        .speed-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
         }
 
         .quiz-area {
             margin-top: 30px;
-            padding: 30px;
-            background: rgba(255,255,255,0.5);
-            border-radius: 15px;
-            border: 2px dashed #667eea;
+            padding: 35px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.6) 100%);
+            border-radius: 20px;
+            border: 3px dashed #667eea;
+            backdrop-filter: blur(10px);
         }
 
         .quiz-question {
-            font-size: 1.3em;
-            margin-bottom: 20px;
+            font-size: 1.4em;
+            margin-bottom: 25px;
             color: #333;
+            font-weight: 600;
         }
 
         input[type="text"] {
             width: 100%;
-            padding: 15px;
+            padding: 18px;
             font-size: 18px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            transition: border-color 0.3s ease;
+            border: 3px solid #ddd;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.9);
         }
 
         input[type="text"]:focus {
             outline: none;
             border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .progress-container {
+            margin: 25px 0;
         }
 
         .progress-bar {
             width: 100%;
-            height: 10px;
+            height: 12px;
             background: rgba(255,255,255,0.3);
-            border-radius: 5px;
+            border-radius: 6px;
             overflow: hidden;
-            margin: 20px 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #00f5a0 0%, #00d9f5 100%);
+            background: linear-gradient(90deg, #00f5a0 0%, #00d9f5 50%, #667eea 100%);
             width: 0%;
-            transition: width 0.5s ease;
+            transition: width 0.8s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%);
+            animation: progressShine 2s infinite;
+        }
+
+        @keyframes progressShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 20px;
-            margin-top: 30px;
+            margin-top: 35px;
         }
 
         .stat-card {
-            background: rgba(255,255,255,0.2);
-            padding: 20px;
-            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 100%);
+            padding: 25px;
+            border-radius: 15px;
             text-align: center;
             color: white;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
         }
 
         .stat-number {
-            font-size: 2em;
+            font-size: 2.5em;
             font-weight: bold;
             display: block;
+            background: linear-gradient(45deg, #ffd700, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-top: 5px;
+            font-weight: 600;
         }
 
         .feedback {
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
             text-align: center;
             font-weight: bold;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: all 0.4s ease;
+            transform: translateY(10px);
         }
 
         .feedback.show {
             opacity: 1;
+            transform: translateY(0);
         }
 
         .feedback.correct {
-            background: #d4edda;
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
             color: #155724;
-            border: 1px solid #c3e6cb;
+            border: 2px solid #c3e6cb;
         }
 
         .feedback.incorrect {
-            background: #f8d7da;
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
             color: #721c24;
-            border: 1px solid #f5c6cb;
+            border: 2px solid #f5c6cb;
+        }
+
+        .difficulty-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .difficulty-btn {
+            padding: 8px 16px;
+            border: 2px solid #667eea;
+            background: transparent;
+            color: #667eea;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .difficulty-btn.active {
+            background: #667eea;
+            color: white;
         }
 
         .hidden {
             display: none;
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 700px) {
             .container {
-                padding: 10px;
+                padding: 15px;
             }
             
             .app-card {
-                padding: 20px;
+                padding: 25px;
             }
             
             h1 {
-                font-size: 2em;
+                font-size: 2.5em;
             }
             
             .foreign-word {
-                font-size: 2em;
+                font-size: 2.2em;
             }
             
             .controls {
                 flex-direction: column;
+                align-items: center;
+            }
+
+            button {
+                width: 80%;
+                max-width: 300px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -273,60 +556,84 @@
     <div class="container">
         <header>
             <h1>🌍 LingoLearn</h1>
-            <p class="subtitle">Master new languages one word at a time</p>
+            <p class="subtitle">Master new languages with enhanced pronunciation & expanded vocabulary</p>
         </header>
 
         <div class="app-card">
             <div class="language-selector">
-                <label for="language">Choose your language:</label><br><br>
+                <label for="language">Choose your language:</label>
                 <select id="language">
                     <option value="telugu">🇮🇳 Telugu</option>
                     <option value="sanskrit">🕉️ Sanskrit</option>
                 </select>
             </div>
 
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressBar"></div>
+            <div class="difficulty-selector">
+                <button class="difficulty-btn active" data-level="beginner">🌱 Beginner</button>
+                <button class="difficulty-btn" data-level="intermediate">🌿 Intermediate</button>
+                <button class="difficulty-btn" data-level="advanced">🌳 Advanced</button>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar"></div>
+                </div>
             </div>
 
             <div class="lesson-area">
                 <div class="word-card" id="wordCard">
-                    <div class="foreign-word" id="foreignWord">నమస్కారం</div>
-                    <div class="pronunciation" id="pronunciation">[na-mas-kaa-ram]</div>
-                    <div class="english-word" id="englishWord" style="display: none;">Hello/Greetings</div>
+                    <div class="word-category" id="wordCategory">Greetings</div>
+                    <div class="word-card-content">
+                        <div class="foreign-word" id="foreignWord">నమస్కారం</div>
+                        <div class="pronunciation" id="pronunciation">[na-mas-kaa-ram]</div>
+                        <div class="phonetic-guide" id="phoneticGuide">Break it down: na·mas·kaa·ram</div>
+                        <div class="english-word" id="englishWord" style="display: none;">Hello/Greetings</div>
+                    </div>
+                </div>
+
+                <div class="speed-control">
+                    <span>🐌 Slow</span>
+                    <input type="range" id="speedSlider" class="speed-slider" min="0.3" max="1.2" step="0.1" value="0.7">
+                    <span>🚀 Fast</span>
                 </div>
 
                 <div class="controls">
                     <button class="btn-primary" onclick="speakWord()">🔊 Listen</button>
+                    <button class="btn-accent" onclick="speakSlow()">🐌 Slow Speech</button>
                     <button class="btn-secondary" onclick="showTranslation()">👁️ Show Translation</button>
                     <button class="btn-success" onclick="nextWord()">➡️ Next Word</button>
                 </div>
             </div>
 
             <div class="quiz-area" id="quizArea" style="display: none;">
-                <div class="quiz-question" id="quizQuestion">What does "Hola" mean in English?</div>
+                <div class="quiz-question" id="quizQuestion">What does "నమస్కారం" mean in English?</div>
                 <input type="text" id="answerInput" placeholder="Type your answer here...">
-                <button class="btn-primary" onclick="checkAnswer()">Check Answer</button>
+                <button class="btn-primary" onclick="checkAnswer()">✨ Check Answer</button>
                 <div class="feedback" id="feedback"></div>
             </div>
 
             <div class="controls">
                 <button class="btn-secondary" onclick="toggleQuiz()">🧠 Quiz Mode</button>
+                <button class="btn-accent" onclick="toggleAutoplay()">⏯️ Auto Play</button>
                 <button class="btn-primary" onclick="resetProgress()">🔄 Reset Progress</button>
             </div>
 
             <div class="stats">
                 <div class="stat-card">
                     <span class="stat-number" id="wordsLearned">0</span>
-                    <span>Words Learned</span>
+                    <span class="stat-label">Words Learned</span>
                 </div>
                 <div class="stat-card">
                     <span class="stat-number" id="correctAnswers">0</span>
-                    <span>Correct Answers</span>
+                    <span class="stat-label">Correct Answers</span>
                 </div>
                 <div class="stat-card">
                     <span class="stat-number" id="streak">0</span>
-                    <span>Current Streak</span>
+                    <span class="stat-label">Current Streak</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="accuracy">0%</span>
+                    <span class="stat-label">Accuracy</span>
                 </div>
             </div>
         </div>
@@ -334,196 +641,40 @@
 
     <script>
         const vocabularyData = {
-            telugu: [
-                {word: "నమస్కారం", pronunciation: "[na-mas-kaa-ram]", translation: "Hello/Greetings", category: "greetings", romanized: "namaskaaram"},
-                {word: "ధన్యవాదాలు", pronunciation: "[dhan-ya-vaa-daa-lu]", translation: "Thank you", category: "politeness", romanized: "dhanyavaadaalu"},
-                {word: "వీడ్కోలు", pronunciation: "[veed-ko-lu]", translation: "Goodbye", category: "greetings", romanized: "veedkolu"},
-                {word: "దయచేసి", pronunciation: "[da-ya-chey-si]", translation: "Please", category: "politeness", romanized: "dayachesi"},
-                {word: "క్షమించండి", pronunciation: "[ksha-min-chan-di]", translation: "Sorry/Excuse me", category: "politeness", romanized: "kshaminchandii"},
-                {word: "నీళ్లు", pronunciation: "[neel-lu]", translation: "Water", category: "food", romanized: "neellu"},
-                {word: "ఇల్లు", pronunciation: "[il-lu]", translation: "House", category: "places", romanized: "illu"},
-                {word: "ప్రేమ", pronunciation: "[prey-ma]", translation: "Love", category: "emotions", romanized: "prema"},
-                {word: "సమయం", pronunciation: "[sa-ma-yam]", translation: "Time", category: "concepts", romanized: "samayam"},
-                {word: "కుటుంబం", pronunciation: "[ku-tum-bam]", translation: "Family", category: "people", romanized: "kutumbam"}
-            ],
-            sanskrit: [
-                {word: "नमस्ते", pronunciation: "[na-mas-te]", translation: "Hello/Greetings", category: "greetings", romanized: "namaste"},
-                {word: "धन्यवाद", pronunciation: "[dhan-ya-vaad]", translation: "Thank you", category: "politeness", romanized: "dhanyavaad"},
-                {word: "शुभविदा", pronunciation: "[shubh-vi-daa]", translation: "Farewell", category: "greetings", romanized: "shubhvidaa"},
-                {word: "कृपया", pronunciation: "[kri-pa-yaa]", translation: "Please", category: "politeness", romanized: "kripayaa"},
-                {word: "क्षमा", pronunciation: "[ksha-maa]", translation: "Forgiveness/Sorry", category: "politeness", romanized: "kshamaa"},
-                {word: "जल", pronunciation: "[ja-la]", translation: "Water", category: "elements", romanized: "jala"},
-                {word: "गृह", pronunciation: "[gri-ha]", translation: "House", category: "places", romanized: "griha"},
-                {word: "प्रेम", pronunciation: "[pre-ma]", translation: "Love", category: "emotions", romanized: "prema"},
-                {word: "काल", pronunciation: "[kaa-la]", translation: "Time", category: "concepts", romanized: "kaala"},
-                {word: "कुल", pronunciation: "[ku-la]", translation: "Family", category: "people", romanized: "kula"}
-            ]
-        };
-
-        let currentLanguage = 'telugu';
-        let currentWordIndex = 0;
-        let quizMode = false;
-        let stats = {
-            wordsLearned: 0,
-            correctAnswers: 0,
-            streak: 0
-        };
-
-        function getCurrentVocabulary() {
-            return vocabularyData[currentLanguage];
-        }
-
-        function getCurrentWord() {
-            return getCurrentVocabulary()[currentWordIndex];
-        }
-
-        function displayWord() {
-            const word = getCurrentWord();
-            document.getElementById('foreignWord').textContent = word.word;
-            document.getElementById('pronunciation').textContent = word.pronunciation;
-            document.getElementById('englishWord').textContent = word.translation;
-            document.getElementById('englishWord').style.display = 'none';
-            
-            // Update quiz question
-            document.getElementById('quizQuestion').textContent = `What does "${word.word}" mean in English?`;
-            document.getElementById('answerInput').value = '';
-            document.getElementById('feedback').classList.remove('show');
-        }
-
-        function showTranslation() {
-            document.getElementById('englishWord').style.display = 'block';
-        }
-
-        function nextWord() {
-            currentWordIndex = (currentWordIndex + 1) % getCurrentVocabulary().length;
-            displayWord();
-            updateProgress();
-            updateStats();
-        }
-
-        function speakWord() {
-            const word = getCurrentWord();
-            
-            if ('speechSynthesis' in window) {
-                // Clear any previous speech
-                speechSynthesis.cancel();
-                
-                const utterance = new SpeechSynthesisUtterance();
-                
-                // For Telugu and Sanskrit, use the romanized version or try different approaches
-                if (currentLanguage === 'telugu') {
-                    // Try multiple approaches for better Telugu pronunciation
-                    utterance.text = word.romanized || word.word;
-                    utterance.lang = 'hi-IN'; // Use Hindi as fallback for better pronunciation
-                    utterance.rate = 0.7;
-                    utterance.pitch = 1.0;
-                } else if (currentLanguage === 'sanskrit') {
-                    utterance.text = word.romanized || word.word;
-                    utterance.lang = 'hi-IN'; // Use Hindi for Sanskrit
-                    utterance.rate = 0.6;
-                    utterance.pitch = 1.0;
-                } else {
-                    utterance.text = word.word;
-                    utterance.lang = 'en-US';
-                    utterance.rate = 0.8;
-                }
-                
-                // Add error handling
-                utterance.onerror = function(event) {
-                    console.log('Speech synthesis error:', event.error);
-                    // Fallback: try with English pronunciation of romanized text
-                    if (word.romanized && event.error) {
-                        const fallbackUtterance = new SpeechSynthesisUtterance(word.romanized);
-                        fallbackUtterance.lang = 'en-US';
-                        fallbackUtterance.rate = 0.6;
-                        speechSynthesis.speak(fallbackUtterance);
-                    }
-                };
-                
-                speechSynthesis.speak(utterance);
-            } else {
-                alert('Speech synthesis not supported in this browser. Try using Chrome, Firefox, or Safari for the best experience.');
-            }
-        }
-
-        function toggleQuiz() {
-            quizMode = !quizMode;
-            const quizArea = document.getElementById('quizArea');
-            const lessonArea = document.querySelector('.lesson-area');
-            
-            if (quizMode) {
-                quizArea.style.display = 'block';
-                lessonArea.style.display = 'none';
-                document.querySelector('button[onclick="toggleQuiz()"]').textContent = '📖 Study Mode';
-            } else {
-                quizArea.style.display = 'none';
-                lessonArea.style.display = 'block';
-                document.querySelector('button[onclick="toggleQuiz()"]').textContent = '🧠 Quiz Mode';
-            }
-        }
-
-        function checkAnswer() {
-            const userAnswer = document.getElementById('answerInput').value.trim().toLowerCase();
-            const correctAnswer = getCurrentWord().translation.toLowerCase();
-            const feedback = document.getElementById('feedback');
-            
-            if (userAnswer === correctAnswer) {
-                feedback.textContent = '🎉 Correct! Great job!';
-                feedback.className = 'feedback correct show';
-                stats.correctAnswers++;
-                stats.streak++;
-            } else {
-                feedback.textContent = `❌ Not quite. The answer is: ${getCurrentWord().translation}`;
-                feedback.className = 'feedback incorrect show';
-                stats.streak = 0;
-            }
-            
-            updateStats();
-            setTimeout(() => {
-                nextWord();
-                feedback.classList.remove('show');
-            }, 2000);
-        }
-
-        function updateProgress() {
-            const progress = ((currentWordIndex + 1) / getCurrentVocabulary().length) * 100;
-            document.getElementById('progressBar').style.width = progress + '%';
-        }
-
-        function updateStats() {
-            stats.wordsLearned = Math.max(stats.wordsLearned, currentWordIndex + 1);
-            document.getElementById('wordsLearned').textContent = stats.wordsLearned;
-            document.getElementById('correctAnswers').textContent = stats.correctAnswers;
-            document.getElementById('streak').textContent = stats.streak;
-        }
-
-        function resetProgress() {
-            currentWordIndex = 0;
-            stats = { wordsLearned: 0, correctAnswers: 0, streak: 0 };
-            displayWord();
-            updateProgress();
-            updateStats();
-        }
-
-        // Language selector event
-        document.getElementById('language').addEventListener('change', function() {
-            currentLanguage = this.value;
-            currentWordIndex = 0;
-            displayWord();
-            updateProgress();
-        });
-
-        // Enter key support for quiz
-        document.getElementById('answerInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                checkAnswer();
-            }
-        });
-
-        // Initialize app
-        displayWord();
-        updateProgress();
-        updateStats();
-    </script>
-</body>
-</html>
+            telugu: {
+                beginner: [
+                    {word: "నమస్కారం", pronunciation: "[na-mas-kaa-ram]", phonetic: "na·mas·kaa·ram", translation: "Hello/Greetings", category: "Greetings", romanized: "namaskaaram", ipa: "/nʌmʌskaːrʌm/"},
+                    {word: "ధన్యవాదాలు", pronunciation: "[dhan-ya-vaa-daa-lu]", phonetic: "dhan·ya·vaa·daa·lu", translation: "Thank you", category: "Politeness", romanized: "dhanyavaadaalu", ipa: "/d̪ʰʌn̪jʌvaːd̪aːlu/"},
+                    {word: "వీడ్కోలు", pronunciation: "[veed-ko-lu]", phonetic: "veed·ko·lu", translation: "Goodbye", category: "Greetings", romanized: "veedkolu", ipa: "/viːɖkoːlu/"},
+                    {word: "దయచేసి", pronunciation: "[da-ya-chey-si]", phonetic: "da·ya·chey·si", translation: "Please", category: "Politeness", romanized: "dayachesi", ipa: "/d̪ʌjʌt͡ʃeːsi/"},
+                    {word: "క్షమించండి", pronunciation: "[ksha-min-chan-di]", phonetic: "ksha·min·chan·di", translation: "Sorry/Excuse me", category: "Politeness", romanized: "kshaminchandii", ipa: "/kʂʌmint͡ʃʌndi/"},
+                    {word: "నీళ్లు", pronunciation: "[neel-lu]", phonetic: "neel·lu", translation: "Water", category: "Basic Needs", romanized: "neellu", ipa: "/niːɭu/"},
+                    {word: "అన్నం", pronunciation: "[an-nam]", phonetic: "an·nam", translation: "Rice/Food", category: "Food", romanized: "annam", ipa: "/ʌnnʌm/"},
+                    {word: "ఇల్లు", pronunciation: "[il-lu]", phonetic: "il·lu", translation: "House", category: "Places", romanized: "illu", ipa: "/illu/"}
+                ],
+                intermediate: [
+                    {word: "ప్రేమ", pronunciation: "[prey-ma]", phonetic: "prey·ma", translation: "Love", category: "Emotions", romanized: "prema", ipa: "/preːmʌ/"},
+                    {word: "సమయం", pronunciation: "[sa-ma-yam]", phonetic: "sa·ma·yam", translation: "Time", category: "Concepts", romanized: "samayam", ipa: "/sʌmʌjʌm/"},
+                    {word: "కుటుంబం", pronunciation: "[ku-tum-bam]", phonetic: "ku·tum·bam", translation: "Family", category: "People", romanized: "kutumbam", ipa: "/kuʈumbʌm/"},
+                    {word: "విద్యార్థి", pronunciation: "[vid-yaar-thi]", phonetic: "vid·yaar·thi", translation: "Student", category: "Education", romanized: "vidyaarthi", ipa: "/vid̪jaːrt̪ʰi/"},
+                    {word: "ఉపాధ్యాయుడు", pronunciation: "[u-paa-dhyaa-yu-du]", phonetic: "u·paa·dhyaa·yu·du", translation: "Teacher", category: "Education", romanized: "upaadhyaayudu", ipa: "/upaːd̪ʰjaːjuɖu/"},
+                    {word: "వైద్యుడు", pronunciation: "[vai-dyu-du]", phonetic: "vai·dyu·du", translation: "Doctor", category: "Professions", romanized: "vaidyudu", ipa: "/vaid̪juɖu/"},
+                    {word: "పుస్తకం", pronunciation: "[pus-ta-kam]", phonetic: "pus·ta·kam", translation: "Book", category: "Education", romanized: "pustakam", ipa: "/pustʌkʌm/"},
+                    {word: "సంగీతం", pronunciation: "[san-gee-tam]", phonetic: "san·gee·tam", translation: "Music", category: "Arts", romanized: "sangeetam", ipa: "/sʌngiːt̪ʌm/"}
+                ],
+                advanced: [
+                    {word: "అభిప్రాయం", pronunciation: "[a-bhi-praa-yam]", phonetic: "a·bhi·praa·yam", translation: "Opinion", category: "Abstract", romanized: "abhipraayam", ipa: "/ʌbʰipraːjʌm/"},
+                    {word: "సాంస్కృతిక", pronunciation: "[saan-skru-ti-ka]", phonetic: "saan·skru·ti·ka", translation: "Cultural", category: "Society", romanized: "saanskrutika", ipa: "/saːnskɾut̪ikʌ/"},
+                    {word: "వ్యాపారం", pronunciation: "[vyaa-paa-ram]", phonetic: "vyaa·paa·ram", translation: "Business", category: "Economy", romanized: "vyaapaaram", ipa: "/vjaːpaːrʌm/"},
+                    {word: "రాజకీయం", pronunciation: "[raa-ja-kee-yam]", phonetic: "raa·ja·kee·yam", translation: "Politics", category: "Government", romanized: "raajakeyam", ipa: "/raːd͡ʒʌkiːjʌm/"},
+                    {word: "పర్యావరణం", pronunciation: "[par-yaa-va-ra-nam]", phonetic: "par·yaa·va·ra·nam", translation: "Environment", category: "Nature", romanized: "paryaavaranam", ipa: "/pʌrjaːvʌrʌɳʌm/"},
+                    {word: "సాంకేతికత", pronunciation: "[saan-key-ti-ka-ta]", phonetic: "saan·key·ti·ka·ta", translation: "Technology", category: "Modern", romanized: "saanketikta", ipa: "/saːnkeːt̪ikʌt̪ʌ/"}
+                ]
+            },
+            sanskrit: {
+                beginner: [
+                    {word: "नमस्ते", pronunciation: "[na-mas-te]", phonetic: "na·mas·te", translation: "Hello/Greetings", category: "Greetings", romanized: "namaste", ipa: "/nʌmʌsteː/"},
+                    {word: "धन्यवाद", pronunciation: "[dhan-ya-vaad]", phonetic: "dhan·ya·vaad", translation: "Thank you", category: "Politeness", romanized: "dhanyavaad", ipa: "/d̪ʰʌn̪jʌvaːd̪/"},
+                    {word: "शुभविदा", pronunciation: "[shubh-vi-daa]", phonetic: "shubh·vi·daa", translation: "Farewell", category: "Greetings", romanized: "shubhvidaa", ipa: "/ʃubʰvid̪aː/"},
+                    {word: "कृपया", pronunciation: "[kri-pa-yaa]", phonetic: "kri·pa·yaa", translation: "Please", category: "Politeness", romanized: "kripayaa", ipa: "/kɾipʌjaː/"},
+                    {word: "क्षमा", pronunciation: "[ksha-maa]", phonetic: "ksha·maa", translation: "Forgiveness/Sorry", category: "Politeness", romanized: "kshamaa", ipa: "/kʂʌmaː/"},
