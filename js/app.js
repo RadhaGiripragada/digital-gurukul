@@ -1,7 +1,7 @@
-// Digital Gurukulam - Telugu & Sanskrit Edge Speech System
+// Digital Gurukulam - Fixed Telugu & Sanskrit Speech System
 
 /**
- * Telugu & Sanskrit Speech System using Microsoft Edge API
+ * Enhanced Telugu & Sanskrit Speech with Robust Fallbacks
  */
 class TeluguSanskritSpeech {
     constructor() {
@@ -9,6 +9,8 @@ class TeluguSanskritSpeech {
         this.isVoicesLoaded = false;
         this.teluguVoice = null;
         this.sanskritVoice = null;
+        this.hindiVoice = null;
+        this.indianEnglishVoice = null;
         this.loadVoices();
     }
 
@@ -16,7 +18,7 @@ class TeluguSanskritSpeech {
         const loadVoicesWhenReady = () => {
             this.availableVoices = speechSynthesis.getVoices();
             this.isVoicesLoaded = true;
-            this.findBestVoices();
+            this.findAllVoices();
             this.logAvailableVoices();
         };
 
@@ -27,94 +29,108 @@ class TeluguSanskritSpeech {
         }
     }
 
-    findBestVoices() {
-        // Telugu voice priorities (best to fallback)
-        const teluguPriorities = [
-            'Microsoft Heera Desktop - Telugu (India)',
-            'Microsoft Heera - Telugu (India)',
-            'Heera',
-            'Telugu'
-        ];
+    findAllVoices() {
+        // Find Telugu voice (if available)
+        this.teluguVoice = this.availableVoices.find(voice => 
+            voice.lang.includes('te-IN') ||
+            voice.name.toLowerCase().includes('telugu') ||
+            voice.name.toLowerCase().includes('heera')
+        );
 
-        // Sanskrit voice priorities (use Hindi voices)
-        const sanskritPriorities = [
-            'Microsoft Hemant Desktop - Hindi (India)',
-            'Microsoft Kalpana Desktop - Hindi (India)',
-            'Microsoft Hemant - Hindi (India)', 
-            'Microsoft Kalpana - Hindi (India)',
-            'Google हिन्दी',
-            'Hemant',
-            'Kalpana'
-        ];
+        // Find Hindi voice (for Sanskrit)
+        this.hindiVoice = this.availableVoices.find(voice => 
+            voice.lang.includes('hi-IN') ||
+            voice.name.toLowerCase().includes('hindi') ||
+            voice.name.toLowerCase().includes('hemant') ||
+            voice.name.toLowerCase().includes('kalpana')
+        );
 
-        // Find Telugu voice
-        for (const priority of teluguPriorities) {
-            const voice = this.availableVoices.find(v => 
-                v.name.includes(priority) || 
-                v.lang.includes('te-IN') ||
-                v.name.toLowerCase().includes(priority.toLowerCase())
-            );
-            if (voice) {
-                this.teluguVoice = voice;
-                break;
-            }
-        }
+        // Find Indian English voice (fallback)
+        this.indianEnglishVoice = this.availableVoices.find(voice => 
+            voice.lang.includes('en-IN') ||
+            voice.name.toLowerCase().includes('ravi')
+        );
 
-        // Find Sanskrit voice (using Hindi)
-        for (const priority of sanskritPriorities) {
-            const voice = this.availableVoices.find(v => 
-                v.name.includes(priority) || 
-                v.lang.includes('hi-IN') ||
-                v.name.toLowerCase().includes(priority.toLowerCase())
-            );
-            if (voice) {
-                this.sanskritVoice = voice;
-                break;
-            }
-        }
+        // Set Sanskrit voice (prefer Hindi)
+        this.sanskritVoice = this.hindiVoice || this.indianEnglishVoice;
 
-        // Fallback to any Indian voice if specific not found
-        if (!this.teluguVoice || !this.sanskritVoice) {
-            const indianVoice = this.availableVoices.find(v => 
-                v.lang.includes('en-IN') || 
-                v.name.toLowerCase().includes('ravi')
-            );
-            
-            if (!this.teluguVoice) this.teluguVoice = indianVoice;
-            if (!this.sanskritVoice) this.sanskritVoice = indianVoice;
-        }
-
-        console.log('🎯 Selected voices:');
-        console.log(`Telugu: ${this.teluguVoice?.name || 'None found'}`);
-        console.log(`Sanskrit: ${this.sanskritVoice?.name || 'None found'}`);
+        console.log('🎯 Voice Detection Results:');
+        console.log(`Telugu: ${this.teluguVoice?.name || '❌ Not found'}`);
+        console.log(`Hindi: ${this.hindiVoice?.name || '❌ Not found'}`);  
+        console.log(`Indian English: ${this.indianEnglishVoice?.name || '❌ Not found'}`);
     }
 
     logAvailableVoices() {
-        console.log('🎤 Telugu & Sanskrit compatible voices:');
-        const relevantVoices = this.availableVoices.filter(voice => 
-            voice.lang.includes('te-IN') || 
-            voice.lang.includes('hi-IN') || 
-            voice.lang.includes('en-IN') ||
-            voice.name.toLowerCase().includes('telugu') ||
-            voice.name.toLowerCase().includes('hindi') ||
-            voice.name.toLowerCase().includes('heera') ||
-            voice.name.toLowerCase().includes('hemant') ||
-            voice.name.toLowerCase().includes('kalpana') ||
-            voice.name.toLowerCase().includes('ravi')
-        );
-        
-        relevantVoices.forEach(voice => {
-            const isSelected = voice === this.teluguVoice || voice === this.sanskritVoice;
-            console.log(`  ${isSelected ? '✅' : '•'} ${voice.name} (${voice.lang})`);
+        console.log('🎤 All available voices:');
+        this.availableVoices.forEach((voice, index) => {
+            const isRelevant = voice.lang.includes('te-IN') || 
+                             voice.lang.includes('hi-IN') || 
+                             voice.lang.includes('en-IN') ||
+                             voice.name.toLowerCase().includes('telugu') ||
+                             voice.name.toLowerCase().includes('hindi') ||
+                             voice.name.toLowerCase().includes('heera') ||
+                             voice.name.toLowerCase().includes('hemant') ||
+                             voice.name.toLowerCase().includes('kalpana') ||
+                             voice.name.toLowerCase().includes('ravi');
+            
+            if (isRelevant) {
+                console.log(`  ✅ ${voice.name} (${voice.lang})`);
+            }
         });
     }
 
     speakTelugu(text, options = {}) {
-        this.speak(text, this.teluguVoice, 'Telugu', options);
+        console.log(`🔊 Attempting Telugu speech: "${text}"`);
+        
+        // Strategy 1: Try native Telugu voice if available
+        if (this.teluguVoice) {
+            console.log(`Using Telugu voice: ${this.teluguVoice.name}`);
+            this.speak(text, this.teluguVoice, 'Telugu', options);
+            return;
+        }
+
+        // Strategy 2: Use romanized text with Hindi voice
+        const word = this.getCurrentWordData();
+        if (word && word.romanized && this.hindiVoice) {
+            console.log(`Using Hindi voice with romanized: ${word.romanized}`);
+            this.speak(word.romanized, this.hindiVoice, 'Telugu (Hindi voice)', options);
+            return;
+        }
+
+        // Strategy 3: Use romanized text with Indian English
+        if (word && word.romanized && this.indianEnglishVoice) {
+            console.log(`Using Indian English with romanized: ${word.romanized}`);
+            this.speak(word.romanized, this.indianEnglishVoice, 'Telugu (Indian English)', options);
+            return;
+        }
+
+        // Strategy 4: Use romanized text with any voice
+        if (word && word.romanized) {
+            console.log(`Using default voice with romanized: ${word.romanized}`);
+            this.speak(word.romanized, null, 'Telugu (default)', options);
+            return;
+        }
+
+        // Strategy 5: Last resort - original text with any voice
+        console.log(`Last resort: using original text with default voice`);
+        this.speak(text, null, 'Telugu (fallback)', options);
     }
 
     speakSanskrit(text, options = {}) {
-        this.speak(text, this.sanskritVoice, 'Sanskrit', options);
+        console.log(`🔊 Attempting Sanskrit speech: "${text}"`);
+        
+        if (this.sanskritVoice) {
+            this.speak(text, this.sanskritVoice, 'Sanskrit', options);
+        } else {
+            // Fallback to romanized if available
+            const word = this.getCurrentWordData();
+            if (word && word.romanized) {
+                console.log(`Using romanized Sanskrit: ${word.romanized}`);
+                this.speak(word.romanized, null, 'Sanskrit (romanized)', options);
+            } else {
+                this.speak(text, null, 'Sanskrit (fallback)', options);
+            }
+        }
     }
 
     speak(text, voice, language, options = {}) {
@@ -123,7 +139,7 @@ class TeluguSanskritSpeech {
             return;
         }
 
-        speechSynthesis.cancel(); // Stop any ongoing speech
+        speechSynthesis.cancel();
 
         const utterance = new SpeechSynthesisUtterance(text);
         
@@ -131,20 +147,57 @@ class TeluguSanskritSpeech {
             utterance.voice = voice;
         }
 
-        // Optimized settings for Telugu/Sanskrit learning
         utterance.rate = options.rate || 0.75;
         utterance.pitch = options.pitch || 1.0; 
         utterance.volume = options.volume || 1.0;
 
         utterance.onstart = () => {
-            console.log(`🔊 Speaking ${language}: "${text}" with ${voice?.name || 'default voice'}`);
+            console.log(`🔊 Speaking ${language}: "${text}"`);
+            console.log(`Voice: ${utterance.voice?.name || 'default'}`);
         };
 
         utterance.onerror = (event) => {
-            console.error(`❌ ${language} speech error:`, event.error);
+            console.error(`❌ Speech error for ${language}:`, event.error);
+            // Try backup method
+            this.tryBackupSpeech(text, language, options);
         };
 
-        speechSynthesis.speak(utterance);
+        utterance.onend = () => {
+            console.log(`✅ Completed speaking ${language}`);
+        };
+
+        try {
+            speechSynthesis.speak(utterance);
+        } catch (error) {
+            console.error(`❌ Failed to speak ${language}:`, error);
+            this.tryBackupSpeech(text, language, options);
+        }
+    }
+
+    tryBackupSpeech(text, language, options) {
+        console.log(`🔄 Trying backup speech for ${language}`);
+        
+        // Get word data for romanized fallback
+        const word = this.getCurrentWordData();
+        if (word && word.romanized && word.romanized !== text) {
+            console.log(`Using romanized backup: ${word.romanized}`);
+            const utterance = new SpeechSynthesisUtterance(word.romanized);
+            utterance.rate = options.rate || 0.75;
+            
+            try {
+                speechSynthesis.speak(utterance);
+            } catch (error) {
+                console.error(`❌ Backup speech also failed:`, error);
+            }
+        }
+    }
+
+    getCurrentWordData() {
+        // Get current word data from the app
+        if (window.app && window.app.getCurrentWord) {
+            return window.app.getCurrentWord();
+        }
+        return null;
     }
 
     speakSyllables(text, language, syllableBreak = '·') {
@@ -168,24 +221,44 @@ class TeluguSanskritSpeech {
                 } else {
                     this.speakSanskrit(cleanSyllable, { rate: 0.6 });
                 }
-            }, index * 1500); // 1.5 seconds between syllables
+            }, index * 1800); // Longer delay between syllables
         });
     }
 
-    // Test both voices
+    // Enhanced voice testing
     testVoices() {
-        console.log('🧪 Testing Telugu voice...');
-        this.speakTelugu('నమస్కారం');
+        console.log('🧪 Testing all available voices...');
         
+        // Test Telugu
         setTimeout(() => {
-            console.log('🧪 Testing Sanskrit voice...');
+            console.log('Testing Telugu pronunciation...');
+            this.speakTelugu('నమస్కారం');
+        }, 1000);
+        
+        // Test Sanskrit  
+        setTimeout(() => {
+            console.log('Testing Sanskrit pronunciation...');
             this.speakSanskrit('नमस्ते');
-        }, 3000);
+        }, 4000);
+
+        // Test with romanized
+        setTimeout(() => {
+            console.log('Testing romanized Telugu...');
+            this.speak('namaskaaram', this.hindiVoice || this.indianEnglishVoice, 'Telugu (romanized)');
+        }, 7000);
+    }
+
+    // Debug function to list all voices
+    listAllVoices() {
+        console.log('📋 ALL AVAILABLE VOICES:');
+        this.availableVoices.forEach((voice, index) => {
+            console.log(`${index + 1}. ${voice.name} (${voice.lang}) - ${voice.localService ? 'Local' : 'Remote'}`);
+        });
     }
 }
 
 /**
- * Enhanced Gurukulam App for Telugu & Sanskrit
+ * Enhanced Gurukulam App with Fixed Telugu Support
  */
 class GurukulamApp {
     constructor() {
@@ -221,12 +294,14 @@ class GurukulamApp {
         this.updateStats();
         this.startSession();
         
-        // Test voices after 2 seconds to ensure they're loaded
+        // Wait longer for voices to load properly
         setTimeout(() => {
-            console.log('🏛️ Digital Gurukulam ready for Telugu & Sanskrit!');
-            // Uncomment to test voices on startup
-            // this.speechSystem.testVoices();
-        }, 2000);
+            console.log('🏛️ Digital Gurukulam ready!');
+            console.log('💡 If Telugu is not working, the system will use romanized pronunciation automatically.');
+            
+            // Auto-test voices to help debug
+            this.speechSystem.listAllVoices();
+        }, 3000);
     }
 
     setupEventListeners() {
@@ -367,11 +442,11 @@ class GurukulamApp {
         if (wordCategory) wordCategory.textContent = word.category;
 
         this.updateProgress();
-        console.log(`📖 Displaying ${this.state.currentLanguage} word: ${word.word}`);
+        console.log(`📖 Displaying ${this.state.currentLanguage} word: ${word.word} (${word.romanized})`);
     }
 
     /**
-     * Enhanced speak word function for Telugu/Sanskrit
+     * Enhanced speak word function with better Telugu support
      */
     speakWord() {
         const word = this.getCurrentWord();
@@ -380,33 +455,32 @@ class GurukulamApp {
             return;
         }
 
-        // Choose appropriate speech method based on language
+        console.log(`🎯 Speaking ${this.state.currentLanguage} word:`, {
+            original: word.word,
+            romanized: word.romanized,
+            pronunciation: word.pronunciation
+        });
+
         if (this.state.currentLanguage === 'telugu') {
-            // For Telugu: try original script first, fallback to romanized
-            const textToSpeak = word.word || word.romanized;
-            this.speechSystem.speakTelugu(textToSpeak, {
+            this.speechSystem.speakTelugu(word.word, {
                 rate: this.state.speechRate
             });
         } else if (this.state.currentLanguage === 'sanskrit') {
-            // For Sanskrit: try original script first, fallback to romanized
-            const textToSpeak = word.word || word.romanized;
-            this.speechSystem.speakSanskrit(textToSpeak, {
+            this.speechSystem.speakSanskrit(word.word, {
                 rate: this.state.speechRate
             });
         }
     }
 
-    /**
-     * Speak word syllable by syllable
-     */
     speakSyllables() {
         const word = this.getCurrentWord();
         if (!word || !word.phonetic) {
-            console.log('❌ No phonetic breakdown available');
-            this.speakWord(); // Fallback to regular pronunciation
+            console.log('❌ No phonetic breakdown available, using regular pronunciation');
+            this.speakWord();
             return;
         }
 
+        console.log(`🔤 Speaking syllables for: ${word.word}`);
         this.speechSystem.speakSyllables(
             word.phonetic, 
             this.state.currentLanguage
@@ -558,7 +632,6 @@ class GurukulamApp {
         const story = stories[this.state.currentStoryIndex] || stories[0];
         const text = `${story.title}. ${story.content}. ${story.moral}`;
         
-        // Use Sanskrit voice for stories (assuming they contain Sanskrit quotes)
         this.speechSystem.speakSanskrit(text, { rate: 0.8 });
     }
 
@@ -694,9 +767,13 @@ function toggleAutoplay() {
     if (window.app) window.app.toggleAutoplay();
 }
 
-// Test voices function (for debugging)
+// Debug functions
 function testVoices() {
     if (window.app) window.app.speechSystem.testVoices();
+}
+
+function listAllVoices() {
+    if (window.app) window.app.speechSystem.listAllVoices();
 }
 
 // Initialize the application
