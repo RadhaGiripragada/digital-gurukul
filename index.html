@@ -812,7 +812,438 @@
     </div>
 
     <script>
+        // Complete vocabulary data with all languages and levels
         const vocabularyData = {
             telugu: {
                 beginner: [
-                    {word: "నమస్కారం", pronunciation: "[na-mas-kaa-ram]", phonetic: "na·mas·kaa·ram", translation: "Hello/Greetings", category: "Greetings", romanized: "namaskaaram", ipa: "/n
+                    {word: "నమస్కారం", pronunciation: "[na-mas-kaa-ram]", phonetic: "na·mas·kaa·ram", translation: "Hello/Greetings", category: "Greetings", romanized: "namaskaaram", ipa: "/nʌmʌskaːrʌm/", context: "A respectful greeting combining 'namas' (bow) and 'karam' (doing), expressing reverence and humility in traditional Indian culture."},
+                    {word: "ధన్యవాదాలు", pronunciation: "[dhan-ya-vaa-daa-lu]", phonetic: "dhan·ya·vaa·daa·lu", translation: "Thank you", category: "Politeness", romanized: "dhanyavaadaalu", ipa: "/d̪ʰʌn̪jʌvaːd̪aːlu/", context: "Expresses gratitude; 'dhanya' means blessed, showing appreciation makes one blessed."},
+                    {word: "వీడ్కోలు", pronunciation: "[veed-ko-lu]", phonetic: "veed·ko·lu", translation: "Goodbye", category: "Greetings", romanized: "veedkolu", ipa: "/viːɖkoːlu/", context: "A formal farewell wishing well-being until the next meeting."},
+                    {word: "దయచేసి", pronunciation: "[da-ya-chey-si]", phonetic: "da·ya·chey·si", translation: "Please", category: "Politeness", romanized: "dayachesi", ipa: "/d̪ʌjʌt͡ʃeːsi/", context: "Shows respect when making requests; literally means 'with kindness'."},
+                    {word: "క్షమించండి", pronunciation: "[ksha-min-chan-di]", phonetic: "ksha·min·chan·di", translation: "Sorry/Excuse me", category: "Politeness", romanized: "kshaminchandii", ipa: "/kʂʌmint͡ʃʌndi/", context: "Used for apologies and to politely get attention."},
+                    {word: "నీళ్లు", pronunciation: "[neel-lu]", phonetic: "neel·lu", translation: "Water", category: "Basic Needs", romanized: "neellu", ipa: "/niːɭu/", context: "Essential for life; in Telugu culture, offering water to guests is a sacred duty."},
+                    {word: "అన్నం", pronunciation: "[an-nam]", phonetic: "an·nam", translation: "Rice/Food", category: "Food", romanized: "annam", ipa: "/ʌnnʌm/", context: "Rice is the staple food; 'annam' also means food in general, considered sacred."},
+                    {word: "ఇల్లు", pronunciation: "[il-lu]", phonetic: "il·lu", translation: "House", category: "Places", romanized: "illu", ipa: "/illu/", context: "Home is considered sacred in Indian culture, where family bonds are strongest."}
+                ],
+                intermediate: [
+                    {word: "ప్రేమ", pronunciation: "[prey-ma]", phonetic: "prey·ma", translation: "Love", category: "Emotions", romanized: "prema", ipa: "/preːmʌ/", context: "Pure, unconditional love; also divine love in spiritual contexts."},
+                    {word: "సమయం", pronunciation: "[sa-ma-yam]", phonetic: "sa·ma·yam", translation: "Time", category: "Concepts", romanized: "samayam", ipa: "/sʌmʌjʌm/", context: "Time is considered precious in Indian philosophy; 'time and tide wait for none'."},
+                    {word: "కుటుంబం", pronunciation: "[ku-tum-bam]", phonetic: "ku·tum·bam", translation: "Family", category: "People", romanized: "kutumbam", ipa: "/kuʈumbʌm/", context: "Family is the foundation of Indian society; includes extended family members."},
+                    {word: "విద్యార్థి", pronunciation: "[vid-yaar-thi]", phonetic: "vid·yaar·thi", translation: "Student", category: "Education", romanized: "vidyaarthi", ipa: "/vid̪jaːrt̪ʰi/", context: "One who seeks knowledge; students are highly respected in Indian tradition."},
+                    {word: "ఉపాధ్యాయుడు", pronunciation: "[u-paa-dhyaa-yu-du]", phonetic: "u·paa·dhyaa·yu·du", translation: "Teacher", category: "Education", romanized: "upaadhyaayudu", ipa: "/upaːd̪ʰjaːjuɖu/", context: "Teachers are revered as gurus; 'Guru Brahma Guru Vishnu' - teachers are divine."},
+                    {word: "వైద्युडు", pronunciation: "[vai-dyu-du]", phonetic: "vai·dyu·du", translation: "Doctor", category: "Professions", romanized: "vaidyudu", ipa: "/vaid̪juɖu/", context: "Healers are respected; Ayurveda is the traditional Indian medical system."},
+                    {word: "పుస्तकम्", pronunciation: "[pus-ta-kam]", phonetic: "pus·ta·kam", translation: "Book", category: "Education", romanized: "pustakam", ipa: "/pustʌkʌm/", context: "Books are treated with reverence; before reading, one pays respects to Saraswati."},
+                    {word: "సంगీతం", pronunciation: "[san-gee-tam]", phonetic: "san·gee·tam", translation: "Music", category: "Arts", romanized: "sangeetam", ipa: "/sʌngiːt̪ʌm/", context: "Music is divine; classical Indian music is considered a path to moksha."}
+                ],
+                advanced: [
+                    {word: "అభిప్రాయం", pronunciation: "[a-bhi-praa-yam]", phonetic: "a·bhi·praa·yam", translation: "Opinion", category: "Abstract", romanized: "abhipraayam", ipa: "/ʌbʰipraːjʌm/", context: "Personal viewpoint; in discussions, all opinions are valued in Indian tradition."},
+                    {word: "సాంस्कृतिक", pronunciation: "[saan-skru-ti-ka]", phonetic: "saan·skru·ti·ka", translation: "Cultural", category: "Society", romanized: "saanskrutika", ipa: "/saːnskɾut̪ikʌ/", context: "Related to culture and traditions passed down through generations."},
+                    {word: "వ्యापारం", pronunciation: "[vyaa-paa-ram]", phonetic: "vyaa·paa·ram", translation: "Business", category: "Economy", romanized: "vyaapaaram", ipa: "/vjaːpaːrʌm/", context: "Trade and commerce; India has ancient trade traditions with the world."},
+                    {word: "రాజकీयం", pronunciation: "[raa-ja-kee-yam]", phonetic: "raa·ja·kee·yam", translation: "Politics", category: "Government", romanized: "raajakeyam", ipa: "/raːd͡ʒʌkiːjʌm/", context: "Governance; ancient Indian texts like Arthashastra discuss political science."},
+                    {word: "పर्यावरणम्", pronunciation: "[par-yaa-va-ra-nam]", phonetic: "par·yaa·va·ra·nam", translation: "Environment", category: "Nature", romanized: "paryaavaranam", ipa: "/pʌrjaːvʌrʌɳʌm/", context: "Nature worship is central to Indian philosophy; 'Vasudhaiva Kutumbakam'."},
+                    {word: "సాంকేతिकता", pronunciation: "[saan-key-ti-ka-ta]", phonetic: "saan·key·ti·ka·ta", translation: "Technology", category: "Modern", romanized: "saanketikta", ipa: "/saːnkeːt̪ikʌt̪ʌ/", context: "Modern technology blending with ancient wisdom and traditions."}
+                ]
+            },
+            sanskrit: {
+                beginner: [
+                    {word: "नमस्ते", pronunciation: "[na-mas-te]", phonetic: "na·mas·te", translation: "Hello/Greetings", category: "Greetings", romanized: "namaste", ipa: "/nʌməsteː/", context: "Sacred greeting meaning 'I bow to you'; acknowledges the divine in another person."},
+                    {word: "धन्यवाद", pronunciation: "[dhan-ya-vaad]", phonetic: "dhan·ya·vaad", translation: "Thank you", category: "Politeness", romanized: "dhanyavaad", ipa: "/d̪ʰʌnjəvaːd̪/", context: "Expressing gratitude; 'dhanya' means blessed, fortunate."},
+                    {word: "विदाई", pronunciation: "[vi-daa-ee]", phonetic: "vi·daa·ee", translation: "Farewell", category: "Greetings", romanized: "vidaayee", ipa: "/vid̪aːiː/", context: "Respectful goodbye; often accompanied by blessings."},
+                    {word: "कृपया", pronunciation: "[kri-pa-ya]", phonetic: "kri·pa·ya", translation: "Please", category: "Politeness", romanized: "kripaya", ipa: "/kɾipəjə/", context: "Request with humility; 'kripa' means grace, mercy."},
+                    {word: "क्षमा", pronunciation: "[ksha-ma]", phonetic: "ksha·ma", translation: "Forgiveness", category: "Politeness", romanized: "kshama", ipa: "/kʂəmaː/", context: "One of divine qualities; forgiveness is strength, not weakness."},
+                    {word: "जल", pronunciation: "[ja-la]", phonetic: "ja·la", translation: "Water", category: "Elements", romanized: "jala", ipa: "/d͡ʒələ/", context: "Sacred element; rivers are worshipped as goddesses in Hinduism."},
+                    {word: "अन्न", pronunciation: "[an-na]", phonetic: "an·na", translation: "Food/Grain", category: "Food", romanized: "anna", ipa: "/ənna/", context: "Food is considered sacred; 'Annam Brahma' - food is divine."},
+                    {word: "गृह", pronunciation: "[gri-ha]", phonetic: "gri·ha", translation: "Home", category: "Places", romanized: "griha", ipa: "/gɾiha/", context: "Sacred space where family traditions are maintained and passed on."}
+                ],
+                intermediate: [
+                    {word: "प्रेम", pronunciation: "[pre-ma]", phonetic: "pre·ma", translation: "Divine Love", category: "Emotions", romanized: "prema", ipa: "/preːma/", context: "Pure, selfless love; the highest form of emotion in spiritual practice."},
+                    {word: "काल", pronunciation: "[kaa-la]", phonetic: "kaa·la", translation: "Time", category: "Philosophy", romanized: "kaala", ipa: "/kaːla/", context: "Time as cosmic principle; also represents death and transformation."},
+                    {word: "कुटुम्ब", pronunciation: "[ku-tum-ba]", phonetic: "ku·tum·ba", translation: "Family", category: "Relations", romanized: "kutumba", ipa: "/kuʈumba/", context: "Extended family; basis of 'Vasudhaiva Kutumbakam' - world is one family."},
+                    {word: "शिष्य", pronunciation: "[shish-ya]", phonetic: "shish·ya", translation: "Disciple", category: "Education", romanized: "shishya", ipa: "/ʃiʂja/", context: "Student in guru-shishya tradition; learning through service and devotion."},
+                    {word: "गुरु", pronunciation: "[gu-ru]", phonetic: "gu·ru", translation: "Teacher/Master", category: "Education", romanized: "guru", ipa: "/guɾu/", context: "Spiritual teacher; 'Gu' means darkness, 'Ru' means light - one who removes ignorance."},
+                    {word: "वैद्य", pronunciation: "[vai-dya]", phonetic: "vai·dya", translation: "Physician", category: "Professions", romanized: "vaidya", ipa: "/vaid̪ja/", context: "Traditional healer; Ayurveda practitioners who treat body, mind, and spirit."},
+                    {word: "शास्त्र", pronunciation: "[shaas-tra]", phonetic: "shaas·tra", translation: "Scripture", category: "Knowledge", romanized: "shaastra", ipa: "/ʃaːstra/", context: "Sacred texts containing eternal wisdom and knowledge."},
+                    {word: "संगीत", pronunciation: "[san-gee-ta]", phonetic: "san·gee·ta", translation: "Music", category: "Arts", romanized: "sangeeta", ipa: "/səŋgiːt̪a/", context: "Sacred art form; classical music is considered a spiritual practice."}
+                ],
+                advanced: [
+                    {word: "दर्शन", pronunciation: "[dar-sha-na]", phonetic: "dar·sha·na", translation: "Philosophy", category: "Philosophy", romanized: "darshana", ipa: "/d̪arʃana/", context: "Systems of Indian philosophy; literally means 'vision' or 'seeing truth'."},
+                    {word: "संस्कृति", pronunciation: "[sans-kri-ti]", phonetic: "sans·kri·ti", translation: "Culture", category: "Society", romanized: "sanskriti", ipa: "/sənskɾit̪i/", context: "Refined culture; literally means 'perfectly formed' or 'well-cultured'."},
+                    {word: "व्यापार", pronunciation: "[vyaa-paa-ra]", phonetic: "vyaa·paa·ra", translation: "Trade", category: "Economy", romanized: "vyaapaara", ipa: "/vjaːpaːra/", context: "Ancient trade traditions; India was center of global commerce."},
+                    {word: "राजनीति", pronunciation: "[raa-ja-nee-ti]", phonetic: "raa·ja·nee·ti", translation: "Politics", category: "Governance", romanized: "raajaneetii", ipa: "/raːd͡ʒaniːt̪i/", context: "Science of governance; ancient texts like Arthashastra detail political philosophy."},
+                    {word: "प्रकृति", pronunciation: "[pra-kri-ti]", phonetic: "pra·kri·ti", translation: "Nature", category: "Philosophy", romanized: "prakriti", ipa: "/prakɾit̪i/", context: "Primordial nature; the creative force of the universe in Samkhya philosophy."},
+                    {word: "तकनीकी", pronunciation: "[tak-nee-kee]", phonetic: "tak·nee·kee", translation: "Technical", category: "Modern", romanized: "takneekee", ipa: "/t̪akniːkiː/", context: "Modern adaptation; Sanskrit evolves to include contemporary concepts."}
+                ]
+            }
+        };
+
+        // Stories data
+        const stories = [
+            {
+                title: "The Wise Sage and the Arrogant Scholar",
+                content: "Once upon a time, there was a great sage who lived in a simple ashram in the foothills of the Himalayas. A proud scholar visited him, speaking in complex Sanskrit verses to show his vast knowledge. The sage listened quietly, then offered him water in a broken clay pot. The scholar refused, saying 'I cannot drink from such a humble vessel.' The sage smiled and said, 'Knowledge, like water, takes the shape of its container. If the container is filled with pride, even the purest knowledge becomes bitter.' The scholar realized his arrogance and bowed before the sage, asking to be his student.",
+                moral: "True wisdom lies in humility. Knowledge without humility is like a lamp without oil - it cannot give light to others. As the ancient saying goes: 'विद्या ददाति विनयं' - Knowledge bestows humility."
+            },
+            {
+                title: "The Banyan Tree and the Reed",
+                content: "A mighty banyan tree stood proud in a field, boasting about its strength to a humble reed nearby. 'Look at me,' said the banyan, 'I am strong and mighty. You are so weak that even a gentle breeze can bend you.' The reed replied humbly, 'You are indeed strong, great tree.' One day, a fierce storm came. The proud banyan tree, refusing to bend, was uprooted by the powerful winds. But the humble reed, bending with the wind, survived the storm unharmed.",
+                moral: "Flexibility and humility often triumph over rigid pride. Those who bend do not break. As Krishna says in the Gita: 'नम्रता परम बल है' - Humility is the greatest strength."
+            },
+            {
+                title: "The Student and the Master's Teaching",
+                content: "A young student approached a learned master and said, 'I want to learn everything you know.' The master took him to a well and said, 'First, you must learn to draw water.' The student was disappointed, thinking this was too simple. For months, he drew water daily, growing frustrated. One day, he noticed that the rope had slowly worn a groove in the stone well. He understood: consistent practice, even of simple things, creates lasting change. He bowed to his master with newfound respect.",
+                moral: "Great achievements come from consistent small efforts. Even water can cut through stone with persistence. 'अभ्यासेन तु कौन्तेय वैराग्येण च गृह्यते' - Through practice and detachment, all things can be achieved."
+            }
+        ];
+
+        // Application state
+        let currentLanguage = 'telugu';
+        let currentDifficulty = 'beginner';
+        let currentWordIndex = 0;
+        let currentMode = 'learn';
+        let currentStoryIndex = 0;
+        let isAutoplay = false;
+        let autoplayInterval;
+        let speechRate = 0.7;
+
+        // Statistics
+        let stats = {
+            wordsLearned: 0,
+            correctAnswers: 0,
+            totalAnswers: 0,
+            streak: 0
+        };
+
+        // Initialize the app
+        function initializeApp() {
+            setupEventListeners();
+            updateDisplay();
+            updateStats();
+            loadProgress();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Language selector
+            document.getElementById('language').addEventListener('change', function() {
+                currentLanguage = this.value;
+                currentWordIndex = 0;
+                updateDisplay();
+                updateProgress();
+            });
+
+            // Difficulty selector
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentDifficulty = this.dataset.level;
+                    currentWordIndex = 0;
+                    updateDisplay();
+                    updateProgress();
+                });
+            });
+
+            // Mode selector
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentMode = this.dataset.mode;
+                    switchMode(currentMode);
+                });
+            });
+
+            // Speed slider
+            document.getElementById('speedSlider').addEventListener('input', function() {
+                speechRate = parseFloat(this.value);
+            });
+
+            // Quiz input
+            document.getElementById('answerInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkAnswer();
+                }
+            });
+        }
+
+        // Switch between modes
+        function switchMode(mode) {
+            document.getElementById('learnMode').classList.add('hidden');
+            document.getElementById('quizMode').classList.add('hidden');
+            document.getElementById('storyMode').classList.add('hidden');
+
+            switch(mode) {
+                case 'learn':
+                    document.getElementById('learnMode').classList.remove('hidden');
+                    updateDisplay();
+                    break;
+                case 'quiz':
+                    document.getElementById('quizMode').classList.remove('hidden');
+                    setupQuiz();
+                    break;
+                case 'story':
+                    document.getElementById('storyMode').classList.remove('hidden');
+                    displayStory();
+                    break;
+            }
+        }
+
+        // Update word display
+        function updateDisplay() {
+            const words = vocabularyData[currentLanguage][currentDifficulty];
+            if (!words || words.length === 0) return;
+
+            const word = words[currentWordIndex];
+            
+            document.getElementById('foreignWord').textContent = word.word;
+            document.getElementById('pronunciation').textContent = word.pronunciation;
+            document.getElementById('phoneticGuide').textContent = `Break it down: ${word.phonetic}`;
+            document.getElementById('englishWord').textContent = word.translation;
+            document.getElementById('culturalContext').textContent = word.context;
+            document.getElementById('wordCategory').textContent = word.category;
+
+            // Hide translation and context by default
+            document.getElementById('englishWord').style.display = 'none';
+            document.getElementById('culturalContext').style.display = 'none';
+
+            updateProgress();
+        }
+
+        // Next word function
+        function nextWord() {
+            const words = vocabularyData[currentLanguage][currentDifficulty];
+            if (!words || words.length === 0) return;
+
+            currentWordIndex = (currentWordIndex + 1) % words.length;
+            updateDisplay();
+            
+            // Update stats
+            stats.wordsLearned = Math.max(stats.wordsLearned, currentWordIndex + 1);
+            updateStats();
+            saveProgress();
+
+            // Show achievement
+            if (currentWordIndex === 0) {
+                showAchievement("Completed all words! 🎉");
+            }
+        }
+
+        // Speech function
+        function speakWord() {
+            const word = vocabularyData[currentLanguage][currentDifficulty][currentWordIndex];
+            if (word && 'speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(word.romanized);
+                utterance.rate = speechRate;
+                utterance.pitch = 1;
+                utterance.volume = 1;
+                
+                // Try to use appropriate voice
+                const voices = speechSynthesis.getVoices();
+                const voice = voices.find(v => v.lang.includes('hi') || v.lang.includes('en'));
+                if (voice) utterance.voice = voice;
+                
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Slow speech function
+        function speakSlow() {
+            const word = vocabularyData[currentLanguage][currentDifficulty][currentWordIndex];
+            if (word && 'speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(word.romanized);
+                utterance.rate = 0.3;
+                utterance.pitch = 1;
+                utterance.volume = 1;
+                
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Show translation
+        function showTranslation() {
+            const englishWord = document.getElementById('englishWord');
+            englishWord.style.display = englishWord.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Show cultural context
+        function showCulturalContext() {
+            const context = document.getElementById('culturalContext');
+            context.style.display = context.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const words = vocabularyData[currentLanguage][currentDifficulty];
+            if (!words || words.length === 0) return;
+
+            const progress = ((currentWordIndex + 1) / words.length) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        // Quiz functions
+        function setupQuiz() {
+            const words = vocabularyData[currentLanguage][currentDifficulty];
+            if (!words || words.length === 0) return;
+
+            const randomIndex = Math.floor(Math.random() * words.length);
+            const word = words[randomIndex];
+            
+            document.getElementById('quizQuestion').textContent = 
+                `What does "${word.word}" mean in English?`;
+            document.getElementById('answerInput').value = '';
+            
+            // Store correct answer
+            document.getElementById('answerInput').dataset.correctAnswer = word.translation.toLowerCase();
+            
+            // Hide feedback
+            document.getElementById('feedback').classList.remove('show');
+        }
+
+        function checkAnswer() {
+            const input = document.getElementById('answerInput');
+            const feedback = document.getElementById('feedback');
+            const userAnswer = input.value.toLowerCase().trim();
+            const correctAnswer = input.dataset.correctAnswer;
+            
+            stats.totalAnswers++;
+            
+            if (userAnswer === correctAnswer || correctAnswer.includes(userAnswer)) {
+                feedback.textContent = "Correct! Well done! 🎉";
+                feedback.className = "feedback correct show";
+                stats.correctAnswers++;
+                stats.streak++;
+                showAchievement("Correct Answer! 🎯");
+            } else {
+                feedback.textContent = `Incorrect. The correct answer is: ${correctAnswer}`;
+                feedback.className = "feedback incorrect show";
+                stats.streak = 0;
+            }
+            
+            updateStats();
+            saveProgress();
+            
+            // Setup next question after delay
+            setTimeout(() => {
+                setupQuiz();
+            }, 2000);
+        }
+
+        // Story functions
+        function displayStory() {
+            const story = stories[currentStoryIndex];
+            document.getElementById('storyTitle').textContent = story.title;
+            document.getElementById('storyContent').textContent = story.content;
+            document.getElementById('storyMoral').innerHTML = `<strong>Moral:</strong> ${story.moral}`;
+        }
+
+        function nextStory() {
+            currentStoryIndex = (currentStoryIndex + 1) % stories.length;
+            displayStory();
+        }
+
+        function speakStory() {
+            const story = stories[currentStoryIndex];
+            if ('speechSynthesis' in window) {
+                const text = `${story.title}. ${story.content}. ${story.moral}`;
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 0.8;
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Autoplay function
+        function toggleAutoplay() {
+            isAutoplay = !isAutoplay;
+            const btn = event.target;
+            
+            if (isAutoplay) {
+                btn.textContent = '⏸️ Pause Auto';
+                autoplayInterval = setInterval(() => {
+                    nextWord();
+                    setTimeout(speakWord, 500);
+                }, 4000);
+            } else {
+                btn.textContent = '⏯️ Auto Play';
+                clearInterval(autoplayInterval);
+            }
+        }
+
+        // Update statistics
+        function updateStats() {
+            document.getElementById('wordsLearned').textContent = stats.wordsLearned;
+            document.getElementById('correctAnswers').textContent = stats.correctAnswers;
+            document.getElementById('streak').textContent = stats.streak;
+            
+            const accuracy = stats.totalAnswers > 0 ? 
+                Math.round((stats.correctAnswers / stats.totalAnswers) * 100) : 0;
+            document.getElementById('accuracy').textContent = `${accuracy}%`;
+        }
+
+        // Show achievement badge
+        function showAchievement(message) {
+            const badge = document.getElementById('achievementBadge');
+            badge.textContent = message;
+            badge.classList.add('show');
+            
+            setTimeout(() => {
+                badge.classList.remove('show');
+            }, 3000);
+        }
+
+        // Reset progress
+        function resetProgress() {
+            if (confirm('Are you sure you want to reset all progress?')) {
+                currentWordIndex = 0;
+                stats = { wordsLearned: 0, correctAnswers: 0, totalAnswers: 0, streak: 0 };
+                updateDisplay();
+                updateStats();
+                saveProgress();
+                showAchievement('Progress Reset! 🔄');
+            }
+        }
+
+        // Save and load progress
+        function saveProgress() {
+            const progressData = {
+                currentLanguage,
+                currentDifficulty,
+                currentWordIndex,
+                stats
+            };
+            // In a real app, this would save to a server or local storage
+            console.log('Progress saved:', progressData);
+        }
+
+        function loadProgress() {
+            // In a real app, this would load from a server or local storage
+            console.log('Progress loaded');
+        }
+
+        function exportProgress() {
+            const progressData = {
+                language: currentLanguage,
+                difficulty: currentDifficulty,
+                wordsLearned: stats.wordsLearned,
+                accuracy: stats.totalAnswers > 0 ? 
+                    Math.round((stats.correctAnswers / stats.totalAnswers) * 100) : 0,
+                streak: stats.streak,
+                date: new Date().toLocaleDateString()
+            };
+            
+            const dataStr = JSON.stringify(progressData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `gurukulam-progress-${new Date().getTime()}.json`;
+            link.click();
+            
+            showAchievement('Progress Exported! 💾');
+        }
+
+        // Initialize the app when page loads
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+</html>
