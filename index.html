@@ -13,9 +13,9 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             min-height: 100vh;
-            color: #333;
+            color: #1e293b;
             position: relative;
             overflow-x: hidden;
         }
@@ -28,7 +28,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1" fill="rgba(255,255,255,0.15)"/><circle cx="40" cy="80" r="3" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="90" r="1.5" fill="rgba(255,255,255,0.12)"/></svg>');
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(99,102,241,0.08)"/><circle cx="80" cy="40" r="1" fill="rgba(34,197,94,0.1)"/><circle cx="40" cy="80" r="3" fill="rgba(236,72,153,0.08)"/><circle cx="90" cy="90" r="1.5" fill="rgba(99,102,241,0.06)"/></svg>');
             animation: float 20s infinite linear;
             pointer-events: none;
             z-index: -1;
@@ -48,7 +48,7 @@
         header {
             text-align: center;
             margin-bottom: 40px;
-            color: white;
+            color: #475569;
             animation: slideInDown 0.8s ease-out;
         }
 
@@ -60,8 +60,8 @@
         h1 {
             font-size: 3.5em;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            background: linear-gradient(45deg, #fff, #ffd700, #fff);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            background: linear-gradient(45deg, #6366f1, #22c55e, #ec4899);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -75,22 +75,23 @@
 
         .subtitle {
             font-size: 1.3em;
-            opacity: 0.9;
+            opacity: 0.8;
             animation: fadeIn 1s ease-out 0.5s both;
+            color: #64748b;
         }
 
         @keyframes fadeIn {
             from { opacity: 0; }
-            to { opacity: 0.9; }
+            to { opacity: 0.8; }
         }
 
         .app-card {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 25px;
             padding: 40px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.08);
             backdrop-filter: blur(15px);
-            border: 1px solid rgba(255,255,255,0.3);
+            border: 1px solid rgba(255,255,255,0.5);
             animation: slideInUp 0.8s ease-out 0.3s both;
             position: relative;
             overflow: hidden;
@@ -103,7 +104,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
             animation: shine 3s infinite;
         }
 
@@ -125,7 +126,7 @@
         .language-selector label {
             font-size: 1.1em;
             font-weight: 600;
-            color: #555;
+            color: #475569;
             margin-bottom: 15px;
             display: block;
         }
@@ -133,25 +134,26 @@
         select {
             padding: 15px 25px;
             font-size: 16px;
-            border: 3px solid #667eea;
+            border: 2px solid #e2e8f0;
             border-radius: 15px;
-            background: linear-gradient(135deg, #fff 0%, #f8f9ff 100%);
+            background: linear-gradient(135deg, #fff 0%, #f8fafc 100%);
             cursor: pointer;
             transition: all 0.4s ease;
             font-weight: 600;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            color: #475569;
         }
 
         select:hover {
-            border-color: #764ba2;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(118, 75, 162, 0.3);
+            border-color: #6366f1;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99,102,241,0.15);
         }
 
         select:focus {
             outline: none;
-            border-color: #f093fb;
-            box-shadow: 0 0 0 4px rgba(240, 147, 251, 0.2);
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99,102,241,0.1);
         }
 
         .lesson-area {
@@ -160,12 +162,12 @@
         }
 
         .word-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background: linear-gradient(135deg, #6366f1 0%, #22c55e 50%, #ec4899 100%);
             color: white;
             padding: 50px 30px;
             border-radius: 20px;
             margin: 20px 0;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             transform: translateY(0);
             transition: all 0.4s ease;
             position: relative;
@@ -179,7 +181,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
             animation: rotate 10s linear infinite;
         }
 
@@ -189,8 +191,8 @@
         }
 
         .word-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 45px rgba(0,0,0,0.3);
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.15);
         }
 
         .word-card-content {
@@ -202,21 +204,21 @@
             font-size: 3em;
             font-weight: bold;
             margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            50% { transform: scale(1.03); }
         }
 
         .pronunciation {
             font-size: 1.4em;
-            opacity: 0.9;
+            opacity: 0.95;
             font-style: italic;
             margin-bottom: 10px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.15);
             padding: 10px 20px;
             border-radius: 25px;
             display: inline-block;
@@ -225,9 +227,9 @@
 
         .phonetic-guide {
             font-size: 0.9em;
-            opacity: 0.8;
+            opacity: 0.85;
             margin-top: 5px;
-            color: #ffd700;
+            color: #fbbf24;
         }
 
         .english-word {
@@ -236,7 +238,7 @@
             opacity: 0.95;
             font-weight: 600;
             padding: 15px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.15);
             border-radius: 15px;
             backdrop-filter: blur(10px);
         }
@@ -245,13 +247,39 @@
             position: absolute;
             top: 15px;
             right: 15px;
-            background: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.2);
             padding: 5px 12px;
             border-radius: 20px;
             font-size: 0.8em;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
+        }
+
+        /* Next button on word card */
+        .next-word-btn {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .next-word-btn:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.5);
+            transform: scale(1.1);
         }
 
         .controls {
@@ -283,7 +311,7 @@
             left: 50%;
             width: 0;
             height: 0;
-            background: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.2);
             border-radius: 50%;
             transition: all 0.4s ease;
             transform: translate(-50%, -50%);
@@ -295,36 +323,36 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
             color: white;
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 8px 20px rgba(99,102,241,0.2);
         }
 
         .btn-secondary {
-            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-            color: #333;
-            box-shadow: 0 8px 20px rgba(252, 182, 159, 0.3);
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            color: #475569;
+            box-shadow: 0 8px 20px rgba(71,85,105,0.1);
         }
 
         .btn-success {
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-            color: #333;
-            box-shadow: 0 8px 20px rgba(168, 237, 234, 0.3);
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: white;
+            box-shadow: 0 8px 20px rgba(34,197,94,0.2);
         }
 
         .btn-accent {
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-            color: #333;
-            box-shadow: 0 8px 20px rgba(255, 154, 158, 0.3);
+            background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
+            color: white;
+            box-shadow: 0 8px 20px rgba(236,72,153,0.2);
         }
 
         button:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
         }
 
         button:active {
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
 
         .speed-control {
@@ -333,6 +361,7 @@
             gap: 10px;
             margin: 15px 0;
             justify-content: center;
+            color: #64748b;
         }
 
         .speed-slider {
@@ -340,7 +369,7 @@
             width: 150px;
             height: 6px;
             border-radius: 3px;
-            background: #ddd;
+            background: #e2e8f0;
             outline: none;
         }
 
@@ -350,23 +379,23 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: #667eea;
+            background: #6366f1;
             cursor: pointer;
         }
 
         .quiz-area {
             margin-top: 30px;
             padding: 35px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.6) 100%);
+            background: linear-gradient(135deg, rgba(248,250,252,0.9) 0%, rgba(241,245,249,0.8) 100%);
             border-radius: 20px;
-            border: 3px dashed #667eea;
+            border: 2px dashed #cbd5e1;
             backdrop-filter: blur(10px);
         }
 
         .quiz-question {
             font-size: 1.4em;
             margin-bottom: 25px;
-            color: #333;
+            color: #334155;
             font-weight: 600;
         }
 
@@ -374,17 +403,18 @@
             width: 100%;
             padding: 18px;
             font-size: 18px;
-            border: 3px solid #ddd;
+            border: 2px solid #e2e8f0;
             border-radius: 15px;
             margin-bottom: 20px;
             transition: all 0.3s ease;
             background: rgba(255,255,255,0.9);
+            color: #475569;
         }
 
         input[type="text"]:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99,102,241,0.1);
             transform: translateY(-2px);
         }
 
@@ -395,15 +425,15 @@
         .progress-bar {
             width: 100%;
             height: 12px;
-            background: rgba(255,255,255,0.3);
+            background: rgba(226,232,240,0.8);
             border-radius: 6px;
             overflow: hidden;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #00f5a0 0%, #00d9f5 50%, #667eea 100%);
+            background: linear-gradient(90deg, #22c55e 0%, #6366f1 50%, #ec4899 100%);
             width: 0%;
             transition: width 0.8s ease;
             position: relative;
@@ -416,7 +446,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%);
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
             animation: progressShine 2s infinite;
         }
 
@@ -433,25 +463,25 @@
         }
 
         .stat-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 100%);
+            background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(248,250,252,0.6) 100%);
             padding: 25px;
             border-radius: 15px;
             text-align: center;
-            color: white;
+            color: #475569;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(226,232,240,0.5);
             transition: transform 0.3s ease;
         }
 
         .stat-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px);
         }
 
         .stat-number {
             font-size: 2.5em;
             font-weight: bold;
             display: block;
-            background: linear-gradient(45deg, #ffd700, #ff6b6b, #4ecdc4);
+            background: linear-gradient(45deg, #6366f1, #22c55e, #ec4899);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -459,9 +489,10 @@
 
         .stat-label {
             font-size: 0.9em;
-            opacity: 0.9;
+            opacity: 0.8;
             margin-top: 5px;
             font-weight: 600;
+            color: #64748b;
         }
 
         .feedback {
@@ -481,15 +512,15 @@
         }
 
         .feedback.correct {
-            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-            color: #155724;
-            border: 2px solid #c3e6cb;
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            color: #166534;
+            border: 2px solid #bbf7d0;
         }
 
         .feedback.incorrect {
-            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
-            color: #721c24;
-            border: 2px solid #f5c6cb;
+            background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+            color: #991b1b;
+            border: 2px solid #fecaca;
         }
 
         .difficulty-selector {
@@ -501,9 +532,9 @@
 
         .difficulty-btn {
             padding: 8px 16px;
-            border: 2px solid #667eea;
+            border: 2px solid #e2e8f0;
             background: transparent;
-            color: #667eea;
+            color: #64748b;
             border-radius: 20px;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -511,8 +542,9 @@
         }
 
         .difficulty-btn.active {
-            background: #667eea;
+            background: #6366f1;
             color: white;
+            border-color: #6366f1;
         }
 
         .hidden {
@@ -549,6 +581,13 @@
             .stats {
                 grid-template-columns: 1fr;
             }
+
+            .next-word-btn {
+                bottom: 10px;
+                right: 10px;
+                width: 45px;
+                height: 45px;
+            }
         }
     </style>
 </head>
@@ -583,6 +622,7 @@
             <div class="lesson-area">
                 <div class="word-card" id="wordCard">
                     <div class="word-category" id="wordCategory">Greetings</div>
+                    <button class="next-word-btn" onclick="nextWord()" title="Next Word">→</button>
                     <div class="word-card-content">
                         <div class="foreign-word" id="foreignWord">నమస్కారం</div>
                         <div class="pronunciation" id="pronunciation">[na-mas-kaa-ram]</div>
@@ -673,270 +713,3 @@
             },
             sanskrit: {
                 beginner: [
-                    {word: "नमस्ते", pronunciation: "[na-mas-te]", phonetic: "na·mas·te", translation: "Hello/Greetings", category: "Greetings", romanized: "namaste", ipa: "/nʌmʌsteː/"},
-                    {word: "धन्यवाद", pronunciation: "[dhan-ya-vaad]", phonetic: "dhan·ya·vaad", translation: "Thank you", category: "Politeness", romanized: "dhanyavaad", ipa: "/d̪ʰʌn̪jʌvaːd̪/"},
-                    {word: "शुभविदा", pronunciation: "[shubh-vi-daa]", phonetic: "shubh·vi·daa", translation: "Farewell", category: "Greetings", romanized: "shubhvidaa", ipa: "/ʃubʰvid̪aː/"},
-                    {word: "कृपया", pronunciation: "[kri-pa-yaa]", phonetic: "kri·pa·yaa", translation: "Please", category: "Politeness", romanized: "kripayaa", ipa: "/kɾipʌjaː/"},
-                    {word: "क्षमा", pronunciation: "[ksha-maa]", phonetic: "ksha·maa", translation: "Forgiveness/Sorry", category: "Politeness", romanized: "kshamaa", ipa: "/kʂʌmaː/"},
-                    {word: "जल", pronunciation: "[ja-la]", phonetic: "ja·la", translation: "Water", category: "Elements", romanized: "jala", ipa: "/d͡ʒʌlʌ/"},
-                    {word: "गृह", pronunciation: "[gri-ha]", phonetic: "gri·ha", translation: "House", category: "Places", romanized: "griha", ipa: "/gɾihʌ/"},
-                    {word: "अन्न", pronunciation: "[an-na]", phonetic: "an·na", translation: "Food", category: "Basic Needs", romanized: "anna", ipa: "/ʌnnʌ/"}
-                ],
-                intermediate: [
-                    {word: "प्रेम", pronunciation: "[pre-ma]", phonetic: "pre·ma", translation: "Love", category: "Emotions", romanized: "prema", ipa: "/preːmʌ/"},
-                    {word: "काल", pronunciation: "[kaa-la]", phonetic: "kaa·la", translation: "Time", category: "Concepts", romanized: "kaala", ipa: "/kaːlʌ/"},
-                    {word: "कुल", pronunciation: "[ku-la]", phonetic: "ku·la", translation: "Family", category: "People", romanized: "kula", ipa: "/kulʌ/"},
-                    {word: "शिष्य", pronunciation: "[shish-ya]", phonetic: "shish·ya", translation: "Student/Disciple", category: "Education", romanized: "shishya", ipa: "/ʃiʂjʌ/"},
-                    {word: "गुरु", pronunciation: "[gu-ru]", phonetic: "gu·ru", translation: "Teacher/Master", category: "Education", romanized: "guru", ipa: "/guɾu/"},
-                    {word: "वैद्य", pronunciation: "[vai-dya]", phonetic: "vai·dya", translation: "Physician", category: "Professions", romanized: "vaidya", ipa: "/vaid̪jʌ/"},
-                    {word: "ग्रन्थ", pronunciation: "[gran-tha]", phonetic: "gran·tha", translation: "Book/Scripture", category: "Knowledge", romanized: "grantha", ipa: "/grʌn̪t̪ʰʌ/"},
-                    {word: "संगीत", pronunciation: "[san-gee-ta]", phonetic: "san·gee·ta", translation: "Music", category: "Arts", romanized: "sangeeta", ipa: "/sʌngiːt̪ʌ/"}
-                ],
-                advanced: [
-                    {word: "दर्शन", pronunciation: "[dar-sha-na]", phonetic: "dar·sha·na", translation: "Philosophy/Vision", category: "Philosophy", romanized: "darshana", ipa: "/d̪ʌrʃʌnʌ/"},
-                    {word: "आध्यात्म", pronunciation: "[aa-dhyaat-ma]", phonetic: "aa·dhyaat·ma", translation: "Spirituality", category: "Spirituality", romanized: "aadhyaatma", ipa: "/aːd̪ʰjaːt̪mʌ/"},
-                    {word: "योग", pronunciation: "[yo-ga]", phonetic: "yo·ga", translation: "Union/Yoga", category: "Spirituality", romanized: "yoga", ipa: "/joːgʌ/"},
-                    {word: "धर्म", pronunciation: "[dhar-ma]", phonetic: "dhar·ma", translation: "Righteousness/Duty", category: "Ethics", romanized: "dharma", ipa: "/d̪ʰʌrmʌ/"},
-                    {word: "अर्थ", pronunciation: "[ar-tha]", phonetic: "ar·tha", translation: "Meaning/Wealth", category: "Concepts", romanized: "artha", ipa: "/ʌrt̪ʰʌ/"},
-                    {word: "मोक्ष", pronunciation: "[mok-sha]", phonetic: "mok·sha", translation: "Liberation", category: "Spirituality", romanized: "moksha", ipa: "/moːkʂʌ/"},
-                    {word: "ब्रह्मण्ड", pronunciation: "[brah-man-da]", phonetic: "brah·man·da", translation: "Universe", category: "Cosmos", romanized: "brahmanda", ipa: "/brʌhmʌɳɖʌ/"}
-                ]
-            }
-        };
-
-        let currentLanguage = 'telugu';
-        let currentDifficulty = 'beginner';
-        let currentWordIndex = 0;
-        let quizMode = false;
-        let autoplay = false;
-        let speechRate = 0.7;
-        let stats = {
-            wordsLearned: 0,
-            correctAnswers: 0,
-            totalAnswers: 0,
-            streak: 0
-        };
-
-        function getCurrentVocabulary() {
-            return vocabularyData[currentLanguage][currentDifficulty];
-        }
-
-        function getCurrentWord() {
-            return getCurrentVocabulary()[currentWordIndex];
-        }
-
-        function displayWord() {
-            const word = getCurrentWord();
-            document.getElementById('foreignWord').textContent = word.word;
-            document.getElementById('pronunciation').textContent = word.pronunciation;
-            document.getElementById('phoneticGuide').textContent = `Break it down: ${word.phonetic}`;
-            document.getElementById('englishWord').textContent = word.translation;
-            document.getElementById('wordCategory').textContent = word.category;
-            document.getElementById('englishWord').style.display = 'none';
-            
-            // Update quiz question
-            document.getElementById('quizQuestion').textContent = `What does "${word.word}" mean in English?`;
-            document.getElementById('answerInput').value = '';
-            document.getElementById('feedback').classList.remove('show');
-        }
-
-        function showTranslation() {
-            const englishWord = document.getElementById('englishWord');
-            englishWord.style.display = 'block';
-            englishWord.style.animation = 'fadeIn 0.5s ease-out';
-        }
-
-        function nextWord() {
-            currentWordIndex = (currentWordIndex + 1) % getCurrentVocabulary().length;
-            displayWord();
-            updateProgress();
-            updateStats();
-            
-            if (autoplay) {
-                setTimeout(() => speakWord(), 500);
-            }
-        }
-
-        function speakWord() {
-            const word = getCurrentWord();
-            
-            if ('speechSynthesis' in window) {
-                speechSynthesis.cancel();
-                
-                const utterance = new SpeechSynthesisUtterance();
-                
-                if (currentLanguage === 'telugu') {
-                    utterance.text = word.romanized || word.word;
-                    utterance.lang = 'hi-IN';
-                    utterance.rate = speechRate;
-                    utterance.pitch = 1.0;
-                    utterance.volume = 1.0;
-                } else if (currentLanguage === 'sanskrit') {
-                    utterance.text = word.romanized || word.word;
-                    utterance.lang = 'hi-IN';
-                    utterance.rate = speechRate * 0.8; // Slower for Sanskrit
-                    utterance.pitch = 1.1;
-                    utterance.volume = 1.0;
-                }
-                
-                utterance.onerror = function(event) {
-                    console.log('Speech synthesis error:', event.error);
-                    if (word.romanized && event.error) {
-                        const fallbackUtterance = new SpeechSynthesisUtterance(word.romanized);
-                        fallbackUtterance.lang = 'en-US';
-                        fallbackUtterance.rate = speechRate * 0.7;
-                        speechSynthesis.speak(fallbackUtterance);
-                    }
-                };
-                
-                speechSynthesis.speak(utterance);
-            } else {
-                alert('Speech synthesis not supported in this browser. Try using Chrome, Firefox, or Safari for the best experience.');
-            }
-        }
-
-        function speakSlow() {
-            const originalRate = speechRate;
-            speechRate = 0.4;
-            speakWord();
-            speechRate = originalRate;
-        }
-
-        function toggleQuiz() {
-            quizMode = !quizMode;
-            const quizArea = document.getElementById('quizArea');
-            const lessonArea = document.querySelector('.lesson-area');
-            
-            if (quizMode) {
-                quizArea.style.display = 'block';
-                lessonArea.style.display = 'none';
-                document.querySelector('button[onclick="toggleQuiz()"]').textContent = '📖 Study Mode';
-            } else {
-                quizArea.style.display = 'none';
-                lessonArea.style.display = 'block';
-                document.querySelector('button[onclick="toggleQuiz()"]').textContent = '🧠 Quiz Mode';
-            }
-        }
-
-        function toggleAutoplay() {
-            autoplay = !autoplay;
-            const btn = document.querySelector('button[onclick="toggleAutoplay()"]');
-            btn.textContent = autoplay ? '⏸️ Stop Auto' : '⏯️ Auto Play';
-            
-            if (autoplay) {
-                speakWord();
-            }
-        }
-
-        function checkAnswer() {
-            const userAnswer = document.getElementById('answerInput').value.trim().toLowerCase();
-            const correctAnswer = getCurrentWord().translation.toLowerCase();
-            const feedback = document.getElementById('feedback');
-            
-            stats.totalAnswers++;
-            
-            const isCorrect = userAnswer === correctAnswer || 
-                             correctAnswer.split('/').some(ans => ans.trim().toLowerCase() === userAnswer);
-            
-            if (isCorrect) {
-                feedback.textContent = '🎉 Excellent! Perfect answer!';
-                feedback.className = 'feedback correct show';
-                stats.correctAnswers++;
-                stats.streak++;
-            } else {
-                feedback.textContent = `❌ Not quite right. The answer is: ${getCurrentWord().translation}`;
-                feedback.className = 'feedback incorrect show';
-                stats.streak = 0;
-            }
-            
-            updateStats();
-            setTimeout(() => {
-                nextWord();
-                feedback.classList.remove('show');
-            }, 2500);
-        }
-
-        function updateProgress() {
-            const progress = ((currentWordIndex + 1) / getCurrentVocabulary().length) * 100;
-            document.getElementById('progressBar').style.width = progress + '%';
-        }
-
-        function updateStats() {
-            stats.wordsLearned = Math.max(stats.wordsLearned, currentWordIndex + 1);
-            const accuracy = stats.totalAnswers > 0 ? Math.round((stats.correctAnswers / stats.totalAnswers) * 100) : 0;
-            
-            document.getElementById('wordsLearned').textContent = stats.wordsLearned;
-            document.getElementById('correctAnswers').textContent = stats.correctAnswers;
-            document.getElementById('streak').textContent = stats.streak;
-            document.getElementById('accuracy').textContent = accuracy + '%';
-        }
-
-        function resetProgress() {
-            currentWordIndex = 0;
-            stats = { wordsLearned: 0, correctAnswers: 0, totalAnswers: 0, streak: 0 };
-            displayWord();
-            updateProgress();
-            updateStats();
-        }
-
-        // Event Listeners
-        document.getElementById('language').addEventListener('change', function() {
-            currentLanguage = this.value;
-            currentWordIndex = 0;
-            displayWord();
-            updateProgress();
-        });
-
-        document.getElementById('speedSlider').addEventListener('input', function() {
-            speechRate = parseFloat(this.value);
-        });
-
-        document.getElementById('answerInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                checkAnswer();
-            }
-        });
-
-        // Difficulty selector
-        document.querySelectorAll('.difficulty-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                currentDifficulty = this.dataset.level;
-                currentWordIndex = 0;
-                displayWord();
-                updateProgress();
-            });
-        });
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', function(e) {
-            if (e.altKey) {
-                switch(e.key) {
-                    case 's': 
-                        e.preventDefault();
-                        speakWord();
-                        break;
-                    case 'n':
-                        e.preventDefault();
-                        nextWord();
-                        break;
-                    case 't':
-                        e.preventDefault();
-                        showTranslation();
-                        break;
-                    case 'q':
-                        e.preventDefault();
-                        toggleQuiz();
-                        break;
-                }
-            }
-        });
-
-        // Initialize app
-        displayWord();
-        updateProgress();
-        updateStats();
-    </script>
-</body>
-</html>
