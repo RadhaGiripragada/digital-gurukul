@@ -1,19 +1,203 @@
-// Digital Gurukulam - Main Application Logic
+// Digital Gurukulam - Telugu & Sanskrit Edge Speech System
 
 /**
- * Application state management
+ * Telugu & Sanskrit Speech System using Microsoft Edge API
+ */
+class TeluguSanskritSpeech {
+    constructor() {
+        this.availableVoices = [];
+        this.isVoicesLoaded = false;
+        this.teluguVoice = null;
+        this.sanskritVoice = null;
+        this.loadVoices();
+    }
+
+    loadVoices() {
+        const loadVoicesWhenReady = () => {
+            this.availableVoices = speechSynthesis.getVoices();
+            this.isVoicesLoaded = true;
+            this.findBestVoices();
+            this.logAvailableVoices();
+        };
+
+        if (speechSynthesis.getVoices().length !== 0) {
+            loadVoicesWhenReady();
+        } else {
+            speechSynthesis.addEventListener('voiceschanged', loadVoicesWhenReady);
+        }
+    }
+
+    findBestVoices() {
+        // Telugu voice priorities (best to fallback)
+        const teluguPriorities = [
+            'Microsoft Heera Desktop - Telugu (India)',
+            'Microsoft Heera - Telugu (India)',
+            'Heera',
+            'Telugu'
+        ];
+
+        // Sanskrit voice priorities (use Hindi voices)
+        const sanskritPriorities = [
+            'Microsoft Hemant Desktop - Hindi (India)',
+            'Microsoft Kalpana Desktop - Hindi (India)',
+            'Microsoft Hemant - Hindi (India)', 
+            'Microsoft Kalpana - Hindi (India)',
+            'Google हिन्दी',
+            'Hemant',
+            'Kalpana'
+        ];
+
+        // Find Telugu voice
+        for (const priority of teluguPriorities) {
+            const voice = this.availableVoices.find(v => 
+                v.name.includes(priority) || 
+                v.lang.includes('te-IN') ||
+                v.name.toLowerCase().includes(priority.toLowerCase())
+            );
+            if (voice) {
+                this.teluguVoice = voice;
+                break;
+            }
+        }
+
+        // Find Sanskrit voice (using Hindi)
+        for (const priority of sanskritPriorities) {
+            const voice = this.availableVoices.find(v => 
+                v.name.includes(priority) || 
+                v.lang.includes('hi-IN') ||
+                v.name.toLowerCase().includes(priority.toLowerCase())
+            );
+            if (voice) {
+                this.sanskritVoice = voice;
+                break;
+            }
+        }
+
+        // Fallback to any Indian voice if specific not found
+        if (!this.teluguVoice || !this.sanskritVoice) {
+            const indianVoice = this.availableVoices.find(v => 
+                v.lang.includes('en-IN') || 
+                v.name.toLowerCase().includes('ravi')
+            );
+            
+            if (!this.teluguVoice) this.teluguVoice = indianVoice;
+            if (!this.sanskritVoice) this.sanskritVoice = indianVoice;
+        }
+
+        console.log('🎯 Selected voices:');
+        console.log(`Telugu: ${this.teluguVoice?.name || 'None found'}`);
+        console.log(`Sanskrit: ${this.sanskritVoice?.name || 'None found'}`);
+    }
+
+    logAvailableVoices() {
+        console.log('🎤 Telugu & Sanskrit compatible voices:');
+        const relevantVoices = this.availableVoices.filter(voice => 
+            voice.lang.includes('te-IN') || 
+            voice.lang.includes('hi-IN') || 
+            voice.lang.includes('en-IN') ||
+            voice.name.toLowerCase().includes('telugu') ||
+            voice.name.toLowerCase().includes('hindi') ||
+            voice.name.toLowerCase().includes('heera') ||
+            voice.name.toLowerCase().includes('hemant') ||
+            voice.name.toLowerCase().includes('kalpana') ||
+            voice.name.toLowerCase().includes('ravi')
+        );
+        
+        relevantVoices.forEach(voice => {
+            const isSelected = voice === this.teluguVoice || voice === this.sanskritVoice;
+            console.log(`  ${isSelected ? '✅' : '•'} ${voice.name} (${voice.lang})`);
+        });
+    }
+
+    speakTelugu(text, options = {}) {
+        this.speak(text, this.teluguVoice, 'Telugu', options);
+    }
+
+    speakSanskrit(text, options = {}) {
+        this.speak(text, this.sanskritVoice, 'Sanskrit', options);
+    }
+
+    speak(text, voice, language, options = {}) {
+        if (!('speechSynthesis' in window)) {
+            console.error('❌ Speech synthesis not supported');
+            return;
+        }
+
+        speechSynthesis.cancel(); // Stop any ongoing speech
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        
+        if (voice) {
+            utterance.voice = voice;
+        }
+
+        // Optimized settings for Telugu/Sanskrit learning
+        utterance.rate = options.rate || 0.75;
+        utterance.pitch = options.pitch || 1.0; 
+        utterance.volume = options.volume || 1.0;
+
+        utterance.onstart = () => {
+            console.log(`🔊 Speaking ${language}: "${text}" with ${voice?.name || 'default voice'}`);
+        };
+
+        utterance.onerror = (event) => {
+            console.error(`❌ ${language} speech error:`, event.error);
+        };
+
+        speechSynthesis.speak(utterance);
+    }
+
+    speakSyllables(text, language, syllableBreak = '·') {
+        if (!text.includes(syllableBreak)) {
+            if (language === 'telugu') {
+                this.speakTelugu(text, { rate: 0.6 });
+            } else {
+                this.speakSanskrit(text, { rate: 0.6 });
+            }
+            return;
+        }
+
+        const syllables = text.split(syllableBreak);
+        console.log(`🔤 Speaking ${language} syllables: ${syllables.join(' - ')}`);
+
+        syllables.forEach((syllable, index) => {
+            setTimeout(() => {
+                const cleanSyllable = syllable.trim();
+                if (language === 'telugu') {
+                    this.speakTelugu(cleanSyllable, { rate: 0.6 });
+                } else {
+                    this.speakSanskrit(cleanSyllable, { rate: 0.6 });
+                }
+            }, index * 1500); // 1.5 seconds between syllables
+        });
+    }
+
+    // Test both voices
+    testVoices() {
+        console.log('🧪 Testing Telugu voice...');
+        this.speakTelugu('నమస్కారం');
+        
+        setTimeout(() => {
+            console.log('🧪 Testing Sanskrit voice...');
+            this.speakSanskrit('नमस्ते');
+        }, 3000);
+    }
+}
+
+/**
+ * Enhanced Gurukulam App for Telugu & Sanskrit
  */
 class GurukulamApp {
     constructor() {
         this.state = {
             currentLanguage: 'telugu',
-            currentDifficulty: 'beginner',
+            currentDifficulty: 'beginner', 
             currentWordIndex: 0,
             currentMode: 'learn',
             currentStoryIndex: 0,
             isAutoplay: false,
             autoplayInterval: null,
-            speechRate: 0.7,
+            speechRate: 0.75,
             stats: {
                 wordsLearned: 0,
                 correctAnswers: 0,
@@ -25,25 +209,26 @@ class GurukulamApp {
         };
         
         this.storageKey = 'gurukulam-progress';
-        this.currentQuizWord = null; // Track current quiz word
+        this.currentQuizWord = null;
+        this.speechSystem = new TeluguSanskritSpeech();
         this.init();
     }
 
-    /**
-     * Initialize the application
-     */
     init() {
         this.loadProgress();
         this.setupEventListeners();
         this.updateDisplay();
         this.updateStats();
         this.startSession();
-        console.log('Digital Gurukulam initialized successfully!');
+        
+        // Test voices after 2 seconds to ensure they're loaded
+        setTimeout(() => {
+            console.log('🏛️ Digital Gurukulam ready for Telugu & Sanskrit!');
+            // Uncomment to test voices on startup
+            // this.speechSystem.testVoices();
+        }, 2000);
     }
 
-    /**
-     * Setup all event listeners
-     */
     setupEventListeners() {
         // Language selector
         const languageSelect = document.getElementById('language');
@@ -51,7 +236,6 @@ class GurukulamApp {
             languageSelect.addEventListener('change', (e) => {
                 this.changeLanguage(e.target.value);
             });
-            // Set initial value
             languageSelect.value = this.state.currentLanguage;
         }
 
@@ -78,7 +262,7 @@ class GurukulamApp {
             speedSlider.value = this.state.speechRate;
         }
 
-        // Quiz input - Enter key
+        // Quiz input
         const answerInput = document.getElementById('answerInput');
         if (answerInput) {
             answerInput.addEventListener('keypress', (e) => {
@@ -87,31 +271,24 @@ class GurukulamApp {
                 }
             });
         }
-
-        // Load voices when available
-        if ('speechSynthesis' in window) {
-            speechSynthesis.addEventListener('voiceschanged', () => {
-                console.log('Speech voices loaded');
-            });
-        }
     }
 
-    /**
-     * Change current language
-     */
     changeLanguage(language) {
+        if (language !== 'telugu' && language !== 'sanskrit') {
+            console.warn('⚠️ Only Telugu and Sanskrit are supported');
+            return;
+        }
+        
         this.state.currentLanguage = language;
         this.state.currentWordIndex = 0;
         this.updateDisplay();
         this.updateProgress();
         this.saveProgress();
+        
+        console.log(`🔄 Language changed to: ${language}`);
     }
 
-    /**
-     * Change difficulty level
-     */
     changeDifficulty(difficulty) {
-        // Update UI
         document.querySelectorAll('.difficulty-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.level === difficulty);
         });
@@ -123,27 +300,21 @@ class GurukulamApp {
         this.saveProgress();
     }
 
-    /**
-     * Switch between modes
-     */
     switchMode(mode) {
-        // Update UI
         document.querySelectorAll('.mode-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.mode === mode);
         });
 
         this.state.currentMode = mode;
 
-        // Hide all modes
         const learnMode = document.getElementById('learnMode');
-        const quizMode = document.getElementById('quizMode');
+        const quizMode = document.getElementById('quizMode'); 
         const storyMode = document.getElementById('storyMode');
 
         if (learnMode) learnMode.classList.add('hidden');
         if (quizMode) quizMode.classList.add('hidden');
         if (storyMode) storyMode.classList.add('hidden');
 
-        // Show selected mode
         switch(mode) {
             case 'learn':
                 if (learnMode) learnMode.classList.remove('hidden');
@@ -160,33 +331,24 @@ class GurukulamApp {
         }
     }
 
-    /**
-     * Get current vocabulary words
-     */
     getCurrentWords() {
         if (!vocabularyData || !vocabularyData[this.state.currentLanguage]) {
-            console.error('Vocabulary data not found for language:', this.state.currentLanguage);
+            console.error(`❌ No vocabulary data for ${this.state.currentLanguage}`);
             return [];
         }
         return vocabularyData[this.state.currentLanguage][this.state.currentDifficulty] || [];
     }
 
-    /**
-     * Get current word
-     */
     getCurrentWord() {
         const words = this.getCurrentWords();
         if (words.length === 0) return null;
         return words[this.state.currentWordIndex] || null;
     }
 
-    /**
-     * Update word display
-     */
     updateDisplay() {
         const word = this.getCurrentWord();
         if (!word) {
-            console.error('No word found to display');
+            console.error('❌ No word found to display');
             return;
         }
 
@@ -200,22 +362,57 @@ class GurukulamApp {
         if (foreignWord) foreignWord.textContent = word.word;
         if (pronunciation) pronunciation.textContent = word.pronunciation;
         if (phoneticGuide) phoneticGuide.textContent = `Break it down: ${word.phonetic}`;
-        if (englishWord) {
-            englishWord.textContent = word.translation;
-            englishWord.style.display = 'block';
-        }
-        if (culturalContext) {
-            culturalContext.textContent = word.context;
-            culturalContext.style.display = 'block';
-        }
+        if (englishWord) englishWord.textContent = word.translation;
+        if (culturalContext) culturalContext.textContent = word.context;
         if (wordCategory) wordCategory.textContent = word.category;
 
         this.updateProgress();
+        console.log(`📖 Displaying ${this.state.currentLanguage} word: ${word.word}`);
     }
 
     /**
-     * Go to previous word
+     * Enhanced speak word function for Telugu/Sanskrit
      */
+    speakWord() {
+        const word = this.getCurrentWord();
+        if (!word) {
+            console.log('❌ No word to speak');
+            return;
+        }
+
+        // Choose appropriate speech method based on language
+        if (this.state.currentLanguage === 'telugu') {
+            // For Telugu: try original script first, fallback to romanized
+            const textToSpeak = word.word || word.romanized;
+            this.speechSystem.speakTelugu(textToSpeak, {
+                rate: this.state.speechRate
+            });
+        } else if (this.state.currentLanguage === 'sanskrit') {
+            // For Sanskrit: try original script first, fallback to romanized
+            const textToSpeak = word.word || word.romanized;
+            this.speechSystem.speakSanskrit(textToSpeak, {
+                rate: this.state.speechRate
+            });
+        }
+    }
+
+    /**
+     * Speak word syllable by syllable
+     */
+    speakSyllables() {
+        const word = this.getCurrentWord();
+        if (!word || !word.phonetic) {
+            console.log('❌ No phonetic breakdown available');
+            this.speakWord(); // Fallback to regular pronunciation
+            return;
+        }
+
+        this.speechSystem.speakSyllables(
+            word.phonetic, 
+            this.state.currentLanguage
+        );
+    }
+
     previousWord() {
         const words = this.getCurrentWords();
         if (words.length === 0) return;
@@ -225,9 +422,6 @@ class GurukulamApp {
         this.saveProgress();
     }
 
-    /**
-     * Go to next word
-     */
     nextWord() {
         const words = this.getCurrentWords();
         if (words.length === 0) return;
@@ -235,7 +429,6 @@ class GurukulamApp {
         this.state.currentWordIndex = (this.state.currentWordIndex + 1) % words.length;
         this.updateDisplay();
 
-        // Update stats
         this.state.stats.wordsLearned = Math.max(
             this.state.stats.wordsLearned, 
             this.state.currentWordIndex + 1
@@ -243,42 +436,11 @@ class GurukulamApp {
         this.updateStats();
         this.saveProgress();
 
-        // Show achievement for completing all words
         if (this.state.currentWordIndex === 0 && this.state.stats.wordsLearned > 0) {
             this.showAchievement("Completed all words! 🎉");
         }
     }
 
-    /**
-     * Speak current word
-     */
-    speakWord() {
-        const word = this.getCurrentWord();
-        if (!word) return;
-
-        if ('speechSynthesis' in window) {
-            // Cancel any ongoing speech
-            speechSynthesis.cancel();
-            
-            const utterance = new SpeechSynthesisUtterance(word.romanized || word.word);
-            utterance.rate = this.state.speechRate;
-            utterance.pitch = 1;
-            utterance.volume = 1;
-            
-            // Try to use appropriate voice
-            const voices = speechSynthesis.getVoices();
-            const voice = voices.find(v => v.lang.includes('hi') || v.lang.includes('en'));
-            if (voice) utterance.voice = voice;
-            
-            speechSynthesis.speak(utterance);
-        } else {
-            console.log('Speech synthesis not supported');
-        }
-    }
-
-    /**
-     * Update progress bar
-     */
     updateProgress() {
         const words = this.getCurrentWords();
         if (words.length === 0) return;
@@ -290,13 +452,10 @@ class GurukulamApp {
         }
     }
 
-    /**
-     * Setup quiz mode
-     */
     setupQuiz() {
         const words = this.getCurrentWords();
         if (words.length === 0) {
-            console.error('No words available for quiz');
+            console.error('❌ No words available for quiz');
             return;
         }
 
@@ -314,16 +473,12 @@ class GurukulamApp {
             answerInput.focus();
         }
 
-        // Hide feedback
         const feedback = document.getElementById('feedback');
         if (feedback) {
             feedback.classList.remove('show');
         }
     }
 
-    /**
-     * Check quiz answer
-     */
     checkAnswer() {
         const answerInput = document.getElementById('answerInput');
         const feedback = document.getElementById('feedback');
@@ -352,15 +507,11 @@ class GurukulamApp {
         this.updateStats();
         this.saveProgress();
 
-        // Setup next question after delay
         setTimeout(() => {
             this.setupQuiz();
         }, 2000);
     }
 
-    /**
-     * Validate answer
-     */
     validateAnswer(userAnswer, correctAnswer) {
         if (!userAnswer || !correctAnswer) return false;
         
@@ -368,25 +519,18 @@ class GurukulamApp {
         const normalizedUser = normalize(userAnswer);
         const normalizedCorrect = normalize(correctAnswer);
         
-        // Exact match
         if (normalizedUser === normalizedCorrect) return true;
-        
-        // Check if correct answer contains user answer (for partial matches)
         if (normalizedCorrect.includes(normalizedUser)) return true;
         
-        // Check for common variations
         const variations = normalizedCorrect.split('/').map(v => v.trim());
         return variations.some(variation => 
             variation === normalizedUser || variation.includes(normalizedUser)
         );
     }
 
-    /**
-     * Display current story
-     */
     displayStory() {
         if (!stories || stories.length === 0) {
-            console.error('No stories available');
+            console.error('❌ No stories available');
             return;
         }
 
@@ -394,16 +538,13 @@ class GurukulamApp {
         
         const storyTitle = document.getElementById('storyTitle');
         const storyContent = document.getElementById('storyContent');
-        const storyMoral = document.getElementById('storyMoral');
+        const storyMoral = document.querySelector('.story-moral');
 
         if (storyTitle) storyTitle.textContent = story.title;
         if (storyContent) storyContent.textContent = story.content;
         if (storyMoral) storyMoral.innerHTML = `<strong>Moral:</strong> ${story.moral}`;
     }
 
-    /**
-     * Go to next story
-     */
     nextStory() {
         if (!stories || stories.length === 0) return;
         
@@ -411,30 +552,19 @@ class GurukulamApp {
         this.displayStory();
     }
 
-    /**
-     * Speak current story
-     */
     speakStory() {
         if (!stories || stories.length === 0) return;
         
         const story = stories[this.state.currentStoryIndex] || stories[0];
         const text = `${story.title}. ${story.content}. ${story.moral}`;
         
-        if ('speechSynthesis' in window) {
-            speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = 0.8;
-            speechSynthesis.speak(utterance);
-        }
+        // Use Sanskrit voice for stories (assuming they contain Sanskrit quotes)
+        this.speechSystem.speakSanskrit(text, { rate: 0.8 });
     }
 
-    /**
-     * Toggle autoplay
-     */
     toggleAutoplay() {
         this.state.isAutoplay = !this.state.isAutoplay;
         
-        // Find the autoplay button
         const autoplayBtns = document.querySelectorAll('button');
         let autoplayBtn = null;
         autoplayBtns.forEach(btn => {
@@ -458,9 +588,6 @@ class GurukulamApp {
         }
     }
 
-    /**
-     * Update statistics display
-     */
     updateStats() {
         const wordsLearned = document.getElementById('wordsLearned');
         const correctAnswers = document.getElementById('correctAnswers');
@@ -476,9 +603,6 @@ class GurukulamApp {
         if (accuracy) accuracy.textContent = `${accuracyPercent}%`;
     }
 
-    /**
-     * Show achievement notification
-     */
     showAchievement(message) {
         const badge = document.getElementById('achievementBadge');
         if (badge) {
@@ -491,9 +615,6 @@ class GurukulamApp {
         }
     }
 
-    /**
-     * Calculate time spent in session
-     */
     calculateTimeSpent() {
         if (this.state.stats.startTime) {
             const elapsed = Math.floor((Date.now() - this.state.stats.startTime) / 1000);
@@ -502,16 +623,10 @@ class GurukulamApp {
         return this.state.stats.timeSpent || 0;
     }
 
-    /**
-     * Start learning session
-     */
     startSession() {
         this.state.stats.startTime = Date.now();
     }
 
-    /**
-     * End learning session
-     */
     endSession() {
         if (this.state.stats.startTime) {
             const sessionTime = Math.floor((Date.now() - this.state.stats.startTime) / 1000);
@@ -520,9 +635,6 @@ class GurukulamApp {
         }
     }
 
-    /**
-     * Save progress to localStorage
-     */
     saveProgress() {
         this.endSession();
         try {
@@ -533,22 +645,15 @@ class GurukulamApp {
         this.startSession();
     }
 
-    /**
-     * Load progress from localStorage
-     */
     loadProgress() {
         try {
             const item = localStorage.getItem(this.storageKey);
             const savedState = item ? JSON.parse(item) : null;
             
             if (savedState) {
-                // Merge saved state with current state
                 this.state = { ...this.state, ...savedState };
-                
-                // Reset session timer
                 this.state.stats.startTime = Date.now();
-                
-                console.log('Progress loaded successfully');
+                console.log('📚 Progress loaded successfully');
             }
         } catch (error) {
             console.log('Progress load failed:', error);
@@ -569,6 +674,10 @@ function speakWord() {
     if (window.app) window.app.speakWord();
 }
 
+function speakSyllables() {
+    if (window.app) window.app.speakSyllables();
+}
+
 function checkAnswer() {
     if (window.app) window.app.checkAnswer();
 }
@@ -585,17 +694,20 @@ function toggleAutoplay() {
     if (window.app) window.app.toggleAutoplay();
 }
 
-// Initialize the application when DOM is loaded
+// Test voices function (for debugging)
+function testVoices() {
+    if (window.app) window.app.speechSystem.testVoices();
+}
+
+// Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
-    // Wait a bit for other scripts to load
     setTimeout(() => {
-        // Check if required data is loaded
         if (typeof vocabularyData === 'undefined') {
-            console.error('vocabularyData not loaded');
+            console.error('❌ vocabularyData not loaded');
             return;
         }
         if (typeof stories === 'undefined') {
-            console.error('stories not loaded');
+            console.error('❌ stories not loaded');
             return;
         }
         
@@ -603,7 +715,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
 });
 
-// Save progress before page unload
 window.addEventListener('beforeunload', () => {
     if (window.app) {
         window.app.saveProgress();
