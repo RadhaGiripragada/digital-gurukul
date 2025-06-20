@@ -181,11 +181,13 @@ class GurukulamApp {
         DOMUtils.setTextContent('culturalContext', word.context);
         DOMUtils.setTextContent('wordCategory', word.category);
 
-        // Hide translation and context by default
+        // Hide translation by default, but ALWAYS show cultural context
         const englishWord = DOMUtils.getElementById('englishWord');
-        const culturalContext = DOMUtils.getElementById('culturalContext');
         if (englishWord) englishWord.style.display = 'none';
-        if (culturalContext) culturalContext.style.display = 'none';
+
+        // Cultural context is always visible - no need to hide it
+        const culturalContext = DOMUtils.getElementById('culturalContext');
+        if (culturalContext) culturalContext.style.display = 'block';
 
         this.updateProgress();
     }
@@ -251,21 +253,6 @@ class GurukulamApp {
             
             if (isHidden) {
                 AnimationUtils.fadeIn(englishWord);
-            }
-        }
-    }
-
-    /**
-     * Toggle cultural context visibility
-     */
-    showCulturalContext() {
-        const context = DOMUtils.getElementById('culturalContext');
-        if (context) {
-            const isHidden = context.style.display === 'none';
-            context.style.display = isHidden ? 'block' : 'none';
-            
-            if (isHidden) {
-                AnimationUtils.fadeIn(context);
             }
         }
     }
@@ -546,10 +533,6 @@ function speakSlow() {
 
 function showTranslation() {
     if (window.app) window.app.showTranslation();
-}
-
-function showCulturalContext() {
-    if (window.app) window.app.showCulturalContext();
 }
 
 function checkAnswer() {
