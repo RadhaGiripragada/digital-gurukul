@@ -46,12 +46,13 @@
                 <div class="lesson-area">
                     <div class="word-card" id="wordCard">
                         <div class="word-category" id="wordCategory">Greetings</div>
+                        <button class="prev-word-btn" onclick="previousWord()" title="Previous Word">←</button>
                         <button class="next-word-btn" onclick="nextWord()" title="Next Word">→</button>
                         <div class="word-card-content">
                             <div class="foreign-word" id="foreignWord">నమస్కారం</div>
                             <div class="pronunciation" id="pronunciation">[na-mas-kaa-ram]</div>
                             <div class="phonetic-guide" id="phoneticGuide">Break it down: na·mas·kaa·ram</div>
-                            <div class="english-word" id="englishWord" style="display: none;">Hello/Greetings</div>
+                            <div class="english-word" id="englishWord">Hello/Greetings</div>
                             <div class="cultural-context" id="culturalContext">
                                 A respectful greeting combining 'namas' (bow) and 'karam' (doing), expressing reverence and humility in traditional Indian culture.
                             </div>
@@ -66,9 +67,6 @@
 
                     <div class="controls">
                         <button class="btn-primary" onclick="speakWord()">🔊 Listen</button>
-                        <button class="btn-accent" onclick="speakSlow()">🐌 Slow Speech</button>
-                        <button class="btn-secondary" onclick="showTranslation()">👁️ Show Translation</button>
-                        <button class="btn-success" onclick="nextWord()">➡️ Next Word</button>
                     </div>
                 </div>
             </div>
@@ -104,8 +102,6 @@
 
             <div class="controls">
                 <button class="btn-secondary" onclick="toggleAutoplay()">⏯️ Auto Play</button>
-                <button class="btn-accent" onclick="resetProgress()">🔄 Reset Progress</button>
-                <button class="btn-success" onclick="exportProgress()">💾 Save Progress</button>
             </div>
 
             <div class="stats">
