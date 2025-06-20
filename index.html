@@ -678,3 +678,265 @@
                     {word: "शुभविदा", pronunciation: "[shubh-vi-daa]", phonetic: "shubh·vi·daa", translation: "Farewell", category: "Greetings", romanized: "shubhvidaa", ipa: "/ʃubʰvid̪aː/"},
                     {word: "कृपया", pronunciation: "[kri-pa-yaa]", phonetic: "kri·pa·yaa", translation: "Please", category: "Politeness", romanized: "kripayaa", ipa: "/kɾipʌjaː/"},
                     {word: "क्षमा", pronunciation: "[ksha-maa]", phonetic: "ksha·maa", translation: "Forgiveness/Sorry", category: "Politeness", romanized: "kshamaa", ipa: "/kʂʌmaː/"},
+                    {word: "जल", pronunciation: "[ja-la]", phonetic: "ja·la", translation: "Water", category: "Elements", romanized: "jala", ipa: "/d͡ʒʌlʌ/"},
+                    {word: "गृह", pronunciation: "[gri-ha]", phonetic: "gri·ha", translation: "House", category: "Places", romanized: "griha", ipa: "/gɾihʌ/"},
+                    {word: "अन्न", pronunciation: "[an-na]", phonetic: "an·na", translation: "Food", category: "Basic Needs", romanized: "anna", ipa: "/ʌnnʌ/"}
+                ],
+                intermediate: [
+                    {word: "प्रेम", pronunciation: "[pre-ma]", phonetic: "pre·ma", translation: "Love", category: "Emotions", romanized: "prema", ipa: "/preːmʌ/"},
+                    {word: "काल", pronunciation: "[kaa-la]", phonetic: "kaa·la", translation: "Time", category: "Concepts", romanized: "kaala", ipa: "/kaːlʌ/"},
+                    {word: "कुल", pronunciation: "[ku-la]", phonetic: "ku·la", translation: "Family", category: "People", romanized: "kula", ipa: "/kulʌ/"},
+                    {word: "शिष्य", pronunciation: "[shish-ya]", phonetic: "shish·ya", translation: "Student/Disciple", category: "Education", romanized: "shishya", ipa: "/ʃiʂjʌ/"},
+                    {word: "गुरु", pronunciation: "[gu-ru]", phonetic: "gu·ru", translation: "Teacher/Master", category: "Education", romanized: "guru", ipa: "/guɾu/"},
+                    {word: "वैद्य", pronunciation: "[vai-dya]", phonetic: "vai·dya", translation: "Physician", category: "Professions", romanized: "vaidya", ipa: "/vaid̪jʌ/"},
+                    {word: "ग्रन्थ", pronunciation: "[gran-tha]", phonetic: "gran·tha", translation: "Book/Scripture", category: "Knowledge", romanized: "grantha", ipa: "/grʌn̪t̪ʰʌ/"},
+                    {word: "संगीत", pronunciation: "[san-gee-ta]", phonetic: "san·gee·ta", translation: "Music", category: "Arts", romanized: "sangeeta", ipa: "/sʌngiːt̪ʌ/"}
+                ],
+                advanced: [
+                    {word: "दर्शन", pronunciation: "[dar-sha-na]", phonetic: "dar·sha·na", translation: "Philosophy/Vision", category: "Philosophy", romanized: "darshana", ipa: "/d̪ʌrʃʌnʌ/"},
+                    {word: "आध्यात्म", pronunciation: "[aa-dhyaat-ma]", phonetic: "aa·dhyaat·ma", translation: "Spirituality", category: "Spirituality", romanized: "aadhyaatma", ipa: "/aːd̪ʰjaːt̪mʌ/"},
+                    {word: "योग", pronunciation: "[yo-ga]", phonetic: "yo·ga", translation: "Union/Yoga", category: "Spirituality", romanized: "yoga", ipa: "/joːgʌ/"},
+                    {word: "धर्म", pronunciation: "[dhar-ma]", phonetic: "dhar·ma", translation: "Righteousness/Duty", category: "Ethics", romanized: "dharma", ipa: "/d̪ʰʌrmʌ/"},
+                    {word: "अर्थ", pronunciation: "[ar-tha]", phonetic: "ar·tha", translation: "Meaning/Wealth", category: "Concepts", romanized: "artha", ipa: "/ʌrt̪ʰʌ/"},
+                    {word: "मोक्ष", pronunciation: "[mok-sha]", phonetic: "mok·sha", translation: "Liberation", category: "Spirituality", romanized: "moksha", ipa: "/moːkʂʌ/"},
+                    {word: "ब्रह्मण्ड", pronunciation: "[brah-man-da]", phonetic: "brah·man·da", translation: "Universe", category: "Cosmos", romanized: "brahmanda", ipa: "/brʌhmʌɳɖʌ/"}
+                ]
+            }
+        };
+
+        let currentLanguage = 'telugu';
+        let currentDifficulty = 'beginner';
+        let currentWordIndex = 0;
+        let quizMode = false;
+        let autoplay = false;
+        let speechRate = 0.7;
+        let stats = {
+            wordsLearned: 0,
+            correctAnswers: 0,
+            totalAnswers: 0,
+            streak: 0
+        };
+
+        function getCurrentVocabulary() {
+            return vocabularyData[currentLanguage][currentDifficulty];
+        }
+
+        function getCurrentWord() {
+            return getCurrentVocabulary()[currentWordIndex];
+        }
+
+        function displayWord() {
+            const word = getCurrentWord();
+            document.getElementById('foreignWord').textContent = word.word;
+            document.getElementById('pronunciation').textContent = word.pronunciation;
+            document.getElementById('phoneticGuide').textContent = `Break it down: ${word.phonetic}`;
+            document.getElementById('englishWord').textContent = word.translation;
+            document.getElementById('wordCategory').textContent = word.category;
+            document.getElementById('englishWord').style.display = 'none';
+            
+            // Update quiz question
+            document.getElementById('quizQuestion').textContent = `What does "${word.word}" mean in English?`;
+            document.getElementById('answerInput').value = '';
+            document.getElementById('feedback').classList.remove('show');
+        }
+
+        function showTranslation() {
+            const englishWord = document.getElementById('englishWord');
+            englishWord.style.display = 'block';
+            englishWord.style.animation = 'fadeIn 0.5s ease-out';
+        }
+
+        function nextWord() {
+            currentWordIndex = (currentWordIndex + 1) % getCurrentVocabulary().length;
+            displayWord();
+            updateProgress();
+            updateStats();
+            
+            if (autoplay) {
+                setTimeout(() => speakWord(), 500);
+            }
+        }
+
+        function speakWord() {
+            const word = getCurrentWord();
+            
+            if ('speechSynthesis' in window) {
+                speechSynthesis.cancel();
+                
+                const utterance = new SpeechSynthesisUtterance();
+                
+                if (currentLanguage === 'telugu') {
+                    utterance.text = word.romanized || word.word;
+                    utterance.lang = 'hi-IN';
+                    utterance.rate = speechRate;
+                    utterance.pitch = 1.0;
+                    utterance.volume = 1.0;
+                } else if (currentLanguage === 'sanskrit') {
+                    utterance.text = word.romanized || word.word;
+                    utterance.lang = 'hi-IN';
+                    utterance.rate = speechRate * 0.8; // Slower for Sanskrit
+                    utterance.pitch = 1.1;
+                    utterance.volume = 1.0;
+                }
+                
+                utterance.onerror = function(event) {
+                    console.log('Speech synthesis error:', event.error);
+                    if (word.romanized && event.error) {
+                        const fallbackUtterance = new SpeechSynthesisUtterance(word.romanized);
+                        fallbackUtterance.lang = 'en-US';
+                        fallbackUtterance.rate = speechRate * 0.7;
+                        speechSynthesis.speak(fallbackUtterance);
+                    }
+                };
+                
+                speechSynthesis.speak(utterance);
+            } else {
+                alert('Speech synthesis not supported in this browser. Try using Chrome, Firefox, or Safari for the best experience.');
+            }
+        }
+
+        function speakSlow() {
+            const originalRate = speechRate;
+            speechRate = 0.4;
+            speakWord();
+            speechRate = originalRate;
+        }
+
+        function toggleQuiz() {
+            quizMode = !quizMode;
+            const quizArea = document.getElementById('quizArea');
+            const lessonArea = document.querySelector('.lesson-area');
+            
+            if (quizMode) {
+                quizArea.style.display = 'block';
+                lessonArea.style.display = 'none';
+                document.querySelector('button[onclick="toggleQuiz()"]').textContent = '📖 Study Mode';
+            } else {
+                quizArea.style.display = 'none';
+                lessonArea.style.display = 'block';
+                document.querySelector('button[onclick="toggleQuiz()"]').textContent = '🧠 Quiz Mode';
+            }
+        }
+
+        function toggleAutoplay() {
+            autoplay = !autoplay;
+            const btn = document.querySelector('button[onclick="toggleAutoplay()"]');
+            btn.textContent = autoplay ? '⏸️ Stop Auto' : '⏯️ Auto Play';
+            
+            if (autoplay) {
+                speakWord();
+            }
+        }
+
+        function checkAnswer() {
+            const userAnswer = document.getElementById('answerInput').value.trim().toLowerCase();
+            const correctAnswer = getCurrentWord().translation.toLowerCase();
+            const feedback = document.getElementById('feedback');
+            
+            stats.totalAnswers++;
+            
+            const isCorrect = userAnswer === correctAnswer || 
+                             correctAnswer.split('/').some(ans => ans.trim().toLowerCase() === userAnswer);
+            
+            if (isCorrect) {
+                feedback.textContent = '🎉 Excellent! Perfect answer!';
+                feedback.className = 'feedback correct show';
+                stats.correctAnswers++;
+                stats.streak++;
+            } else {
+                feedback.textContent = `❌ Not quite right. The answer is: ${getCurrentWord().translation}`;
+                feedback.className = 'feedback incorrect show';
+                stats.streak = 0;
+            }
+            
+            updateStats();
+            setTimeout(() => {
+                nextWord();
+                feedback.classList.remove('show');
+            }, 2500);
+        }
+
+        function updateProgress() {
+            const progress = ((currentWordIndex + 1) / getCurrentVocabulary().length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function updateStats() {
+            stats.wordsLearned = Math.max(stats.wordsLearned, currentWordIndex + 1);
+            const accuracy = stats.totalAnswers > 0 ? Math.round((stats.correctAnswers / stats.totalAnswers) * 100) : 0;
+            
+            document.getElementById('wordsLearned').textContent = stats.wordsLearned;
+            document.getElementById('correctAnswers').textContent = stats.correctAnswers;
+            document.getElementById('streak').textContent = stats.streak;
+            document.getElementById('accuracy').textContent = accuracy + '%';
+        }
+
+        function resetProgress() {
+            currentWordIndex = 0;
+            stats = { wordsLearned: 0, correctAnswers: 0, totalAnswers: 0, streak: 0 };
+            displayWord();
+            updateProgress();
+            updateStats();
+        }
+
+        // Event Listeners
+        document.getElementById('language').addEventListener('change', function() {
+            currentLanguage = this.value;
+            currentWordIndex = 0;
+            displayWord();
+            updateProgress();
+        });
+
+        document.getElementById('speedSlider').addEventListener('input', function() {
+            speechRate = parseFloat(this.value);
+        });
+
+        document.getElementById('answerInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+
+        // Difficulty selector
+        document.querySelectorAll('.difficulty-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentDifficulty = this.dataset.level;
+                currentWordIndex = 0;
+                displayWord();
+                updateProgress();
+            });
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.altKey) {
+                switch(e.key) {
+                    case 's': 
+                        e.preventDefault();
+                        speakWord();
+                        break;
+                    case 'n':
+                        e.preventDefault();
+                        nextWord();
+                        break;
+                    case 't':
+                        e.preventDefault();
+                        showTranslation();
+                        break;
+                    case 'q':
+                        e.preventDefault();
+                        toggleQuiz();
+                        break;
+                }
+            }
+        });
+
+        // Initialize app
+        displayWord();
+        updateProgress();
+        updateStats();
+    </script>
+</body>
+</html>
