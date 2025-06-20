@@ -181,15 +181,25 @@ class GurukulamApp {
         DOMUtils.setTextContent('culturalContext', word.context);
         DOMUtils.setTextContent('wordCategory', word.category);
 
-        // Hide translation by default, but ALWAYS show cultural context
+        // Both translation and cultural context are always visible
         const englishWord = DOMUtils.getElementById('englishWord');
-        if (englishWord) englishWord.style.display = 'none';
-
-        // Cultural context is always visible - no need to hide it
         const culturalContext = DOMUtils.getElementById('culturalContext');
+        if (englishWord) englishWord.style.display = 'block';
         if (culturalContext) culturalContext.style.display = 'block';
 
         this.updateProgress();
+    }
+
+    /**
+     * Go to previous word
+     */
+    previousWord() {
+        const words = this.getCurrentWords();
+        if (words.length === 0) return;
+
+        this.state.currentWordIndex = (this.state.currentWordIndex - 1 + words.length) % words.length;
+        this.updateDisplay();
+        this.saveProgress();
     }
 
     /**
@@ -226,34 +236,6 @@ class GurukulamApp {
                 rate: this.state.speechRate,
                 language: this.state.currentLanguage
             });
-        }
-    }
-
-    /**
-     * Speak word slowly
-     */
-    speakSlow() {
-        const word = this.getCurrentWord();
-        if (word) {
-            SpeechUtils.speak(word.romanized, {
-                rate: 0.3,
-                language: this.state.currentLanguage
-            });
-        }
-    }
-
-    /**
-     * Toggle translation visibility
-     */
-    showTranslation() {
-        const englishWord = DOMUtils.getElementById('englishWord');
-        if (englishWord) {
-            const isHidden = englishWord.style.display === 'none';
-            englishWord.style.display = isHidden ? 'block' : 'none';
-            
-            if (isHidden) {
-                AnimationUtils.fadeIn(englishWord);
-            }
         }
     }
 
@@ -420,50 +402,6 @@ class GurukulamApp {
     }
 
     /**
-     * Reset all progress
-     */
-    resetProgress() {
-        if (confirm('Are you sure you want to reset all progress?')) {
-            this.state.currentWordIndex = 0;
-            this.state.stats = {
-                wordsLearned: 0,
-                correctAnswers: 0,
-                totalAnswers: 0,
-                streak: 0,
-                timeSpent: 0,
-                startTime: Date.now()
-            };
-            
-            this.updateDisplay();
-            this.updateStats();
-            this.saveProgress();
-            this.showAchievement('Progress Reset! 🔄');
-        }
-    }
-
-    /**
-     * Export progress data
-     */
-    exportProgress() {
-        const progressData = {
-            language: this.state.currentLanguage,
-            difficulty: this.state.currentDifficulty,
-            wordsLearned: this.state.stats.wordsLearned,
-            accuracy: ProgressUtils.calculateAccuracy(
-                this.state.stats.correctAnswers, 
-                this.state.stats.totalAnswers
-            ),
-            streak: this.state.stats.streak,
-            timeSpent: this.calculateTimeSpent(),
-            exportDate: DateUtils.formatDate(),
-            exportTime: DateUtils.formatTime()
-        };
-        
-        ExportUtils.exportJSON(progressData, `gurukulam-progress-${DateUtils.getTimestamp()}`);
-        this.showAchievement('Progress Exported! 💾');
-    }
-
-    /**
      * Calculate time spent in session
      */
     calculateTimeSpent() {
@@ -519,20 +457,16 @@ class GurukulamApp {
 }
 
 // Global functions for onclick handlers
+function previousWord() {
+    if (window.app) window.app.previousWord();
+}
+
 function nextWord() {
     if (window.app) window.app.nextWord();
 }
 
 function speakWord() {
     if (window.app) window.app.speakWord();
-}
-
-function speakSlow() {
-    if (window.app) window.app.speakSlow();
-}
-
-function showTranslation() {
-    if (window.app) window.app.showTranslation();
 }
 
 function checkAnswer() {
@@ -549,14 +483,6 @@ function speakStory() {
 
 function toggleAutoplay() {
     if (window.app) window.app.toggleAutoplay();
-}
-
-function resetProgress() {
-    if (window.app) window.app.resetProgress();
-}
-
-function exportProgress() {
-    if (window.app) window.app.exportProgress();
 }
 
 // Initialize the application when DOM is loaded
