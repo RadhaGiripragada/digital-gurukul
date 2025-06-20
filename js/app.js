@@ -45,7 +45,7 @@ class GurukulamApp {
      */
     setupEventListeners() {
         // Language selector
-        const languageSelect = DOMUtils.getElementById('language');
+        const languageSelect = document.getElementById('language');
         if (languageSelect) {
             languageSelect.addEventListener('change', (e) => {
                 this.changeLanguage(e.target.value);
@@ -67,7 +67,7 @@ class GurukulamApp {
         });
 
         // Speed slider
-        const speedSlider = DOMUtils.getElementById('speedSlider');
+        const speedSlider = document.getElementById('speedSlider');
         if (speedSlider) {
             speedSlider.addEventListener('input', (e) => {
                 this.state.speechRate = parseFloat(e.target.value);
@@ -75,7 +75,7 @@ class GurukulamApp {
         }
 
         // Quiz input - Enter key
-        const answerInput = DOMUtils.getElementById('answerInput');
+        const answerInput = document.getElementById('answerInput');
         if (answerInput) {
             answerInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
@@ -85,7 +85,7 @@ class GurukulamApp {
         }
 
         // Load voices when available
-        if (SpeechUtils.isSupported()) {
+        if ('speechSynthesis' in window) {
             speechSynthesis.addEventListener('voiceschanged', () => {
                 console.log('Speech voices loaded');
             });
@@ -131,22 +131,26 @@ class GurukulamApp {
         this.state.currentMode = mode;
 
         // Hide all modes
-        DOMUtils.getElementById('learnMode')?.classList.add('hidden');
-        DOMUtils.getElementById('quizMode')?.classList.add('hidden');
-        DOMUtils.getElementById('storyMode')?.classList.add('hidden');
+        const learnMode = document.getElementById('learnMode');
+        const quizMode = document.getElementById('quizMode');
+        const storyMode = document.getElementById('storyMode');
+
+        if (learnMode) learnMode.classList.add('hidden');
+        if (quizMode) quizMode.classList.add('hidden');
+        if (storyMode) storyMode.classList.add('hidden');
 
         // Show selected mode
         switch(mode) {
             case 'learn':
-                DOMUtils.getElementById('learnMode')?.classList.remove('hidden');
+                if (learnMode) learnMode.classList.remove('hidden');
                 this.updateDisplay();
                 break;
             case 'quiz':
-                DOMUtils.getElementById('quizMode')?.classList.remove('hidden');
+                if (quizMode) quizMode.classList.remove('hidden');
                 this.setupQuiz();
                 break;
             case 'story':
-                DOMUtils.getElementById('storyMode')?.classList.remove('hidden');
+                if (storyMode) storyMode.classList.remove('hidden');
                 this.displayStory();
                 break;
         }
@@ -174,18 +178,25 @@ class GurukulamApp {
         const word = this.getCurrentWord();
         if (!word) return;
 
-        DOMUtils.setTextContent('foreignWord', word.word);
-        DOMUtils.setTextContent('pronunciation', word.pronunciation);
-        DOMUtils.setTextContent('phoneticGuide', `Break it down: ${word.phonetic}`);
-        DOMUtils.setTextContent('englishWord', word.translation);
-        DOMUtils.setTextContent('culturalContext', word.context);
-        DOMUtils.setTextContent('wordCategory', word.category);
+        const foreignWord = document.getElementById('foreignWord');
+        const pronunciation = document.getElementById('pronunciation');
+        const phoneticGuide = document.getElementById('phoneticGuide');
+        const englishWord = document.getElementById('englishWord');
+        const culturalContext = document.getElementById('culturalContext');
+        const wordCategory = document.getElementById('wordCategory');
 
-        // Both translation and cultural context are always visible
-        const englishWord = DOMUtils.getElementById('englishWord');
-        const culturalContext = DOMUtils.getElementById('culturalContext');
-        if (englishWord) englishWord.style.display = 'block';
-        if (culturalContext) culturalContext.style.display = 'block';
+        if (foreignWord) foreignWord.textContent = word.word;
+        if (pronunciation) pronunciation.textContent = word.pronunciation;
+        if (phoneticGuide) phoneticGuide.textContent = `Break it down: ${word.phonetic}`;
+        if (englishWord) {
+            englishWord.textContent = word.translation;
+            englishWord.style.display = 'block';
+        }
+        if (culturalContext) {
+            culturalContext.textContent = word.context;
+            culturalContext.style.display = 'block';
+        }
+        if (wordCategory) wordCategory.textContent = word.category;
 
         this.updateProgress();
     }
@@ -231,11 +242,18 @@ class GurukulamApp {
      */
     speakWord() {
         const word = this.getCurrentWord();
-        if (word) {
-            SpeechUtils.speak(word.romanized, {
-                rate: this.state.speechRate,
-                language: this.state.currentLanguage
-            });
+        if (word && 'speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(word.romanized);
+            utterance.rate = this.state.speechRate;
+            utterance.pitch = 1;
+            utterance.volume = 1;
+            
+            // Try to use appropriate voice
+            const voices = speechSynthesis.getVoices();
+            const voice = voices.find(v => v.lang.includes('hi') || v.lang.includes('en'));
+            if (voice) utterance.voice = voice;
+            
+            speechSynthesis.speak(utterance);
         }
     }
 
@@ -247,7 +265,7 @@ class GurukulamApp {
         if (words.length === 0) return;
 
         const progress = ((this.state.currentWordIndex + 1) / words.length) * 100;
-        const progressBar = DOMUtils.getElementById('progressBar');
+        const progressBar = document.getElementById('progressBar');
         if (progressBar) {
             progressBar.style.width = `${progress}%`;
         }
@@ -260,12 +278,15 @@ class GurukulamApp {
         const words = this.getCurrentWords();
         if (words.length === 0) return;
 
-        const randomIndex = RandomUtils.randomInt(0, words.length - 1);
+        const randomIndex = Math.floor(Math.random() * words.length);
         const word = words[randomIndex];
 
-        DOMUtils.setTextContent('quizQuestion', `What does "${word.word}" mean in English?`);
+        const quizQuestion = document.getElementById('quizQuestion');
+        if (quizQuestion) {
+            quizQuestion.textContent = `What does "${word.word}" mean in English?`;
+        }
         
-        const answerInput = DOMUtils.getElementById('answerInput');
+        const answerInput = document.getElementById('answerInput');
         if (answerInput) {
             answerInput.value = '';
             answerInput.dataset.correctAnswer = word.translation.toLowerCase();
@@ -273,7 +294,7 @@ class GurukulamApp {
         }
 
         // Hide feedback
-        const feedback = DOMUtils.getElementById('feedback');
+        const feedback = document.getElementById('feedback');
         if (feedback) {
             feedback.classList.remove('show');
         }
@@ -283,8 +304,8 @@ class GurukulamApp {
      * Check quiz answer
      */
     checkAnswer() {
-        const answerInput = DOMUtils.getElementById('answerInput');
-        const feedback = DOMUtils.getElementById('feedback');
+        const answerInput = document.getElementById('answerInput');
+        const feedback = document.getElementById('feedback');
         
         if (!answerInput || !feedback) return;
 
@@ -293,7 +314,7 @@ class GurukulamApp {
 
         this.state.stats.totalAnswers++;
 
-        const isCorrect = ValidationUtils.checkAnswer(userAnswer, correctAnswer);
+        const isCorrect = this.validateAnswer(userAnswer, correctAnswer);
 
         if (isCorrect) {
             feedback.textContent = "Correct! Well done! 🎉";
@@ -317,14 +338,41 @@ class GurukulamApp {
     }
 
     /**
+     * Validate answer
+     */
+    validateAnswer(userAnswer, correctAnswer) {
+        if (!userAnswer || !correctAnswer) return false;
+        
+        const normalize = (str) => str.toLowerCase().trim();
+        const normalizedUser = normalize(userAnswer);
+        const normalizedCorrect = normalize(correctAnswer);
+        
+        // Exact match
+        if (normalizedUser === normalizedCorrect) return true;
+        
+        // Check if correct answer contains user answer (for partial matches)
+        if (normalizedCorrect.includes(normalizedUser)) return true;
+        
+        // Check for common variations
+        const variations = normalizedCorrect.split('/').map(v => v.trim());
+        return variations.some(variation => 
+            variation === normalizedUser || variation.includes(normalizedUser)
+        );
+    }
+
+    /**
      * Display current story
      */
     displayStory() {
         const story = stories[this.state.currentStoryIndex] || stories[0];
         
-        DOMUtils.setTextContent('storyTitle', story.title);
-        DOMUtils.setTextContent('storyContent', story.content);
-        DOMUtils.setHTML('storyMoral', `<strong>Moral:</strong> ${story.moral}`);
+        const storyTitle = document.getElementById('storyTitle');
+        const storyContent = document.getElementById('storyContent');
+        const storyMoral = document.getElementById('storyMoral');
+
+        if (storyTitle) storyTitle.textContent = story.title;
+        if (storyContent) storyContent.textContent = story.content;
+        if (storyMoral) storyMoral.innerHTML = `<strong>Moral:</strong> ${story.moral}`;
     }
 
     /**
@@ -342,10 +390,11 @@ class GurukulamApp {
         const story = stories[this.state.currentStoryIndex] || stories[0];
         const text = `${story.title}. ${story.content}. ${story.moral}`;
         
-        SpeechUtils.speak(text, {
-            rate: 0.8,
-            language: 'en'
-        });
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 0.8;
+            speechSynthesis.speak(utterance);
+        }
     }
 
     /**
@@ -375,22 +424,25 @@ class GurukulamApp {
      * Update statistics display
      */
     updateStats() {
-        DOMUtils.setTextContent('wordsLearned', this.state.stats.wordsLearned.toString());
-        DOMUtils.setTextContent('correctAnswers', this.state.stats.correctAnswers.toString());
-        DOMUtils.setTextContent('streak', this.state.stats.streak.toString());
+        const wordsLearned = document.getElementById('wordsLearned');
+        const correctAnswers = document.getElementById('correctAnswers');
+        const streak = document.getElementById('streak');
+        const accuracy = document.getElementById('accuracy');
+
+        if (wordsLearned) wordsLearned.textContent = this.state.stats.wordsLearned.toString();
+        if (correctAnswers) correctAnswers.textContent = this.state.stats.correctAnswers.toString();
+        if (streak) streak.textContent = this.state.stats.streak.toString();
         
-        const accuracy = ProgressUtils.calculateAccuracy(
-            this.state.stats.correctAnswers, 
-            this.state.stats.totalAnswers
-        );
-        DOMUtils.setTextContent('accuracy', `${accuracy}%`);
+        const accuracyPercent = this.state.stats.totalAnswers > 0 ? 
+            Math.round((this.state.stats.correctAnswers / this.state.stats.totalAnswers) * 100) : 0;
+        if (accuracy) accuracy.textContent = `${accuracyPercent}%`;
     }
 
     /**
      * Show achievement notification
      */
     showAchievement(message) {
-        const badge = DOMUtils.getElementById('achievementBadge');
+        const badge = document.getElementById('achievementBadge');
         if (badge) {
             badge.textContent = message;
             badge.classList.add('show');
@@ -431,27 +483,46 @@ class GurukulamApp {
     }
 
     /**
-     * Save progress to localStorage
+     * Save progress to localStorage (fallback if StorageUtils not available)
      */
     saveProgress() {
         this.endSession();
-        StorageUtils.save(this.storageKey, this.state);
+        try {
+            if (typeof StorageUtils !== 'undefined') {
+                StorageUtils.save(this.storageKey, this.state);
+            } else {
+                localStorage.setItem(this.storageKey, JSON.stringify(this.state));
+            }
+        } catch (error) {
+            console.log('Progress save failed:', error);
+        }
         this.startSession();
     }
 
     /**
-     * Load progress from localStorage
+     * Load progress from localStorage (fallback if StorageUtils not available)
      */
     loadProgress() {
-        const savedState = StorageUtils.load(this.storageKey);
-        if (savedState) {
-            // Merge saved state with current state
-            this.state = { ...this.state, ...savedState };
+        try {
+            let savedState;
+            if (typeof StorageUtils !== 'undefined') {
+                savedState = StorageUtils.load(this.storageKey);
+            } else {
+                const item = localStorage.getItem(this.storageKey);
+                savedState = item ? JSON.parse(item) : null;
+            }
             
-            // Reset session timer
-            this.state.stats.startTime = Date.now();
-            
-            console.log('Progress loaded successfully');
+            if (savedState) {
+                // Merge saved state with current state
+                this.state = { ...this.state, ...savedState };
+                
+                // Reset session timer
+                this.state.stats.startTime = Date.now();
+                
+                console.log('Progress loaded successfully');
+            }
+        } catch (error) {
+            console.log('Progress load failed:', error);
         }
     }
 }
@@ -487,7 +558,10 @@ function toggleAutoplay() {
 
 // Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    window.app = new GurukulamApp();
+    // Wait a bit for other scripts to load
+    setTimeout(() => {
+        window.app = new GurukulamApp();
+    }, 100);
 });
 
 // Save progress before page unload
