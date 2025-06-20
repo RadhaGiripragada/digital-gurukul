@@ -335,88 +335,28 @@
     <script>
         const vocabularyData = {
             telugu: [
-                {word: "నమస్కారం", pronunciation: "[na-mas-kaa-ram]", translation: "Hello/Greetings", category: "greetings"},
-                {word: "ధన్యవాదాలు", pronunciation: "[dhan-ya-vaa-daa-lu]", translation: "Thank you", category: "politeness"},
-                {word: "వీడ్కోలు", pronunciation: "[veed-ko-lu]", translation: "Goodbye", category: "greetings"},
-                {word: "దయచేసి", pronunciation: "[da-ya-chey-si]", translation: "Please", category: "politeness"},
-                {word: "క్షమించండి", pronunciation: "[ksha-min-chan-di]", translation: "Sorry/Excuse me", category: "politeness"},
-                {word: "నీళ్లు", pronunciation: "[neel-lu]", translation: "Water", category: "food"},
-                {word: "ఇల్లు", pronunciation: "[il-lu]", translation: "House", category: "places"},
-                {word: "ప్రేమ", pronunciation: "[prey-ma]", translation: "Love", category: "emotions"},
-                {word: "సమయం", pronunciation: "[sa-ma-yam]", translation: "Time", category: "concepts"},
-                {word: "కుటుంబం", pronunciation: "[ku-tum-bam]", translation: "Family", category: "people"}
+                {word: "నమస్కారం", pronunciation: "[na-mas-kaa-ram]", translation: "Hello/Greetings", category: "greetings", romanized: "namaskaaram"},
+                {word: "ధన్యవాదాలు", pronunciation: "[dhan-ya-vaa-daa-lu]", translation: "Thank you", category: "politeness", romanized: "dhanyavaadaalu"},
+                {word: "వీడ్కోలు", pronunciation: "[veed-ko-lu]", translation: "Goodbye", category: "greetings", romanized: "veedkolu"},
+                {word: "దయచేసి", pronunciation: "[da-ya-chey-si]", translation: "Please", category: "politeness", romanized: "dayachesi"},
+                {word: "క్షమించండి", pronunciation: "[ksha-min-chan-di]", translation: "Sorry/Excuse me", category: "politeness", romanized: "kshaminchandii"},
+                {word: "నీళ్లు", pronunciation: "[neel-lu]", translation: "Water", category: "food", romanized: "neellu"},
+                {word: "ఇల్లు", pronunciation: "[il-lu]", translation: "House", category: "places", romanized: "illu"},
+                {word: "ప్రేమ", pronunciation: "[prey-ma]", translation: "Love", category: "emotions", romanized: "prema"},
+                {word: "సమయం", pronunciation: "[sa-ma-yam]", translation: "Time", category: "concepts", romanized: "samayam"},
+                {word: "కుటుంబం", pronunciation: "[ku-tum-bam]", translation: "Family", category: "people", romanized: "kutumbam"}
             ],
             sanskrit: [
-                {word: "नमस्ते", pronunciation: "[na-mas-te]", translation: "Hello/Greetings", category: "greetings"},
-                {word: "धन्यवाद", pronunciation: "[dhan-ya-vaad]", translation: "Thank you", category: "politeness"},
-                {word: "शुभविदा", pronunciation: "[shubh-vi-daa]", translation: "Farewell", category: "greetings"},
-                {word: "कृपया", pronunciation: "[kri-pa-yaa]", translation: "Please", category: "politeness"},
-                {word: "क्षमा", pronunciation: "[ksha-maa]", translation: "Forgiveness/Sorry", category: "politeness"},
-                {word: "जल", pronunciation: "[ja-la]", translation: "Water", category: "elements"},
-                {word: "गृह", pronunciation: "[gri-ha]", translation: "House", category: "places"},
-                {word: "प्रेम", pronunciation: "[pre-ma]", translation: "Love", category: "emotions"},
-                {word: "काल", pronunciation: "[kaa-la]", translation: "Time", category: "concepts"},
-                {word: "कुल", pronunciation: "[ku-la]", translation: "Family", category: "people"}
-            ],
-            spanish: [
-                {word: "¡Hola!", pronunciation: "[OH-lah]", translation: "Hello!", category: "greetings"},
-                {word: "Gracias", pronunciation: "[GRAH-see-ahs]", translation: "Thank you", category: "politeness"},
-                {word: "Adiós", pronunciation: "[ah-dee-OHS]", translation: "Goodbye", category: "greetings"},
-                {word: "Por favor", pronunciation: "[por fah-VOR]", translation: "Please", category: "politeness"},
-                {word: "Lo siento", pronunciation: "[loh see-EN-toh]", translation: "I'm sorry", category: "politeness"},
-                {word: "Agua", pronunciation: "[AH-gwah]", translation: "Water", category: "food"},
-                {word: "Casa", pronunciation: "[KAH-sah]", translation: "House", category: "places"},
-                {word: "Amor", pronunciation: "[ah-MOR]", translation: "Love", category: "emotions"},
-                {word: "Tiempo", pronunciation: "[tee-EM-poh]", translation: "Time", category: "concepts"},
-                {word: "Familia", pronunciation: "[fah-MEE-lee-ah]", translation: "Family", category: "people"}
-            ],
-            french: [
-                {word: "Bonjour", pronunciation: "[bon-ZHOOR]", translation: "Hello", category: "greetings"},
-                {word: "Merci", pronunciation: "[mer-SEE]", translation: "Thank you", category: "politeness"},
-                {word: "Au revoir", pronunciation: "[oh ruh-VWAR]", translation: "Goodbye", category: "greetings"},
-                {word: "S'il vous plaît", pronunciation: "[see voo PLAY]", translation: "Please", category: "politeness"},
-                {word: "Excusez-moi", pronunciation: "[ek-skew-zay MWAH]", translation: "Excuse me", category: "politeness"},
-                {word: "Eau", pronunciation: "[OH]", translation: "Water", category: "food"},
-                {word: "Maison", pronunciation: "[may-ZOHN]", translation: "House", category: "places"},
-                {word: "Amour", pronunciation: "[ah-MOOR]", translation: "Love", category: "emotions"},
-                {word: "Temps", pronunciation: "[TAHN]", translation: "Time", category: "concepts"},
-                {word: "Famille", pronunciation: "[fah-MEEL]", translation: "Family", category: "people"}
-            ],
-            german: [
-                {word: "Hallo", pronunciation: "[HAH-loh]", translation: "Hello", category: "greetings"},
-                {word: "Danke", pronunciation: "[DAHN-keh]", translation: "Thank you", category: "politeness"},
-                {word: "Auf Wiedersehen", pronunciation: "[owf VEE-der-zayn]", translation: "Goodbye", category: "greetings"},
-                {word: "Bitte", pronunciation: "[BIT-teh]", translation: "Please", category: "politeness"},
-                {word: "Entschuldigung", pronunciation: "[ent-SHOOL-dee-goong]", translation: "Excuse me", category: "politeness"},
-                {word: "Wasser", pronunciation: "[VAH-ser]", translation: "Water", category: "food"},
-                {word: "Haus", pronunciation: "[HOWS]", translation: "House", category: "places"},
-                {word: "Liebe", pronunciation: "[LEE-beh]", translation: "Love", category: "emotions"},
-                {word: "Zeit", pronunciation: "[TSYT]", translation: "Time", category: "concepts"},
-                {word: "Familie", pronunciation: "[fah-MEE-lee-eh]", translation: "Family", category: "people"}
-            ],
-            italian: [
-                {word: "Ciao", pronunciation: "[CHAH-oh]", translation: "Hello/Bye", category: "greetings"},
-                {word: "Grazie", pronunciation: "[GRAH-tsee-eh]", translation: "Thank you", category: "politeness"},
-                {word: "Arrivederci", pronunciation: "[ah-ree-veh-DER-chee]", translation: "Goodbye", category: "greetings"},
-                {word: "Per favore", pronunciation: "[per fah-VOH-reh]", translation: "Please", category: "politeness"},
-                {word: "Mi scusi", pronunciation: "[mee SKOO-zee]", translation: "Excuse me", category: "politeness"},
-                {word: "Acqua", pronunciation: "[AH-kwah]", translation: "Water", category: "food"},
-                {word: "Casa", pronunciation: "[KAH-sah]", translation: "House", category: "places"},
-                {word: "Amore", pronunciation: "[ah-MOH-reh]", translation: "Love", category: "emotions"},
-                {word: "Tempo", pronunciation: "[TEM-poh]", translation: "Time", category: "concepts"},
-                {word: "Famiglia", pronunciation: "[fah-MEE-lyah]", translation: "Family", category: "people"}
-            ],
-            portuguese: [
-                {word: "Olá", pronunciation: "[oh-LAH]", translation: "Hello", category: "greetings"},
-                {word: "Obrigado", pronunciation: "[oh-bree-GAH-doh]", translation: "Thank you", category: "politeness"},
-                {word: "Tchau", pronunciation: "[CHOW]", translation: "Goodbye", category: "greetings"},
-                {word: "Por favor", pronunciation: "[por fah-VOR]", translation: "Please", category: "politeness"},
-                {word: "Com licença", pronunciation: "[kom lee-SEN-sah]", translation: "Excuse me", category: "politeness"},
-                {word: "Água", pronunciation: "[AH-gwah]", translation: "Water", category: "food"},
-                {word: "Casa", pronunciation: "[KAH-sah]", translation: "House", category: "places"},
-                {word: "Amor", pronunciation: "[ah-MOR]", translation: "Love", category: "emotions"},
-                {word: "Tempo", pronunciation: "[TEM-poh]", translation: "Time", category: "concepts"},
-                {word: "Família", pronunciation: "[fah-MEE-lee-ah]", translation: "Family", category: "people"}
+                {word: "नमस्ते", pronunciation: "[na-mas-te]", translation: "Hello/Greetings", category: "greetings", romanized: "namaste"},
+                {word: "धन्यवाद", pronunciation: "[dhan-ya-vaad]", translation: "Thank you", category: "politeness", romanized: "dhanyavaad"},
+                {word: "शुभविदा", pronunciation: "[shubh-vi-daa]", translation: "Farewell", category: "greetings", romanized: "shubhvidaa"},
+                {word: "कृपया", pronunciation: "[kri-pa-yaa]", translation: "Please", category: "politeness", romanized: "kripayaa"},
+                {word: "क्षमा", pronunciation: "[ksha-maa]", translation: "Forgiveness/Sorry", category: "politeness", romanized: "kshamaa"},
+                {word: "जल", pronunciation: "[ja-la]", translation: "Water", category: "elements", romanized: "jala"},
+                {word: "गृह", pronunciation: "[gri-ha]", translation: "House", category: "places", romanized: "griha"},
+                {word: "प्रेम", pronunciation: "[pre-ma]", translation: "Love", category: "emotions", romanized: "prema"},
+                {word: "काल", pronunciation: "[kaa-la]", translation: "Time", category: "concepts", romanized: "kaala"},
+                {word: "कुल", pronunciation: "[ku-la]", translation: "Family", category: "people", romanized: "kula"}
             ]
         };
 
@@ -463,20 +403,46 @@
 
         function speakWord() {
             const word = getCurrentWord();
+            
             if ('speechSynthesis' in window) {
-                const utterance = new SpeechSynthesisUtterance(word.word);
+                // Clear any previous speech
+                speechSynthesis.cancel();
                 
-                // Set language based on current selection
-                const languageCodes = {
-                    telugu: 'te-IN',
-                    sanskrit: 'hi-IN' // Using Hindi pronunciation as fallback for Sanskrit
+                const utterance = new SpeechSynthesisUtterance();
+                
+                // For Telugu and Sanskrit, use the romanized version or try different approaches
+                if (currentLanguage === 'telugu') {
+                    // Try multiple approaches for better Telugu pronunciation
+                    utterance.text = word.romanized || word.word;
+                    utterance.lang = 'hi-IN'; // Use Hindi as fallback for better pronunciation
+                    utterance.rate = 0.7;
+                    utterance.pitch = 1.0;
+                } else if (currentLanguage === 'sanskrit') {
+                    utterance.text = word.romanized || word.word;
+                    utterance.lang = 'hi-IN'; // Use Hindi for Sanskrit
+                    utterance.rate = 0.6;
+                    utterance.pitch = 1.0;
+                } else {
+                    utterance.text = word.word;
+                    utterance.lang = 'en-US';
+                    utterance.rate = 0.8;
+                }
+                
+                // Add error handling
+                utterance.onerror = function(event) {
+                    console.log('Speech synthesis error:', event.error);
+                    // Fallback: try with English pronunciation of romanized text
+                    if (word.romanized && event.error) {
+                        const fallbackUtterance = new SpeechSynthesisUtterance(word.romanized);
+                        fallbackUtterance.lang = 'en-US';
+                        fallbackUtterance.rate = 0.6;
+                        speechSynthesis.speak(fallbackUtterance);
+                    }
                 };
                 
-                utterance.lang = languageCodes[currentLanguage];
-                utterance.rate = 0.8;
                 speechSynthesis.speak(utterance);
             } else {
-                alert('Speech synthesis not supported in this browser');
+                alert('Speech synthesis not supported in this browser. Try using Chrome, Firefox, or Safari for the best experience.');
             }
         }
 
