@@ -25,6 +25,7 @@ class GurukulamApp {
         };
         
         this.storageKey = 'gurukulam-progress';
+        this.currentQuizWord = null; // Track current quiz word
         this.init();
     }
 
@@ -50,6 +51,8 @@ class GurukulamApp {
             languageSelect.addEventListener('change', (e) => {
                 this.changeLanguage(e.target.value);
             });
+            // Set initial value
+            languageSelect.value = this.state.currentLanguage;
         }
 
         // Difficulty selector
@@ -72,6 +75,7 @@ class GurukulamApp {
             speedSlider.addEventListener('input', (e) => {
                 this.state.speechRate = parseFloat(e.target.value);
             });
+            speedSlider.value = this.state.speechRate;
         }
 
         // Quiz input - Enter key
@@ -160,7 +164,11 @@ class GurukulamApp {
      * Get current vocabulary words
      */
     getCurrentWords() {
-        return vocabularyData[this.state.currentLanguage]?.[this.state.currentDifficulty] || [];
+        if (!vocabularyData || !vocabularyData[this.state.currentLanguage]) {
+            console.error('Vocabulary data not found for language:', this.state.currentLanguage);
+            return [];
+        }
+        return vocabularyData[this.state.currentLanguage][this.state.currentDifficulty] || [];
     }
 
     /**
@@ -168,6 +176,7 @@ class GurukulamApp {
      */
     getCurrentWord() {
         const words = this.getCurrentWords();
+        if (words.length === 0) return null;
         return words[this.state.currentWordIndex] || null;
     }
 
@@ -176,7 +185,10 @@ class GurukulamApp {
      */
     updateDisplay() {
         const word = this.getCurrentWord();
-        if (!word) return;
+        if (!word) {
+            console.error('No word found to display');
+            return;
+        }
 
         const foreignWord = document.getElementById('foreignWord');
         const pronunciation = document.getElementById('pronunciation');
@@ -242,8 +254,13 @@ class GurukulamApp {
      */
     speakWord() {
         const word = this.getCurrentWord();
-        if (word && 'speechSynthesis' in window) {
-            const utterance = new SpeechSynthesisUtterance(word.romanized);
+        if (!word) return;
+
+        if ('speechSynthesis' in window) {
+            // Cancel any ongoing speech
+            speechSynthesis.cancel();
+            
+            const utterance = new SpeechSynthesisUtterance(word.romanized || word.word);
             utterance.rate = this.state.speechRate;
             utterance.pitch = 1;
             utterance.volume = 1;
@@ -254,6 +271,8 @@ class GurukulamApp {
             if (voice) utterance.voice = voice;
             
             speechSynthesis.speak(utterance);
+        } else {
+            console.log('Speech synthesis not supported');
         }
     }
 
@@ -276,20 +295,22 @@ class GurukulamApp {
      */
     setupQuiz() {
         const words = this.getCurrentWords();
-        if (words.length === 0) return;
+        if (words.length === 0) {
+            console.error('No words available for quiz');
+            return;
+        }
 
         const randomIndex = Math.floor(Math.random() * words.length);
-        const word = words[randomIndex];
+        this.currentQuizWord = words[randomIndex];
 
         const quizQuestion = document.getElementById('quizQuestion');
         if (quizQuestion) {
-            quizQuestion.textContent = `What does "${word.word}" mean in English?`;
+            quizQuestion.textContent = `What does "${this.currentQuizWord.word}" mean in English?`;
         }
         
         const answerInput = document.getElementById('answerInput');
         if (answerInput) {
             answerInput.value = '';
-            answerInput.dataset.correctAnswer = word.translation.toLowerCase();
             answerInput.focus();
         }
 
@@ -307,10 +328,10 @@ class GurukulamApp {
         const answerInput = document.getElementById('answerInput');
         const feedback = document.getElementById('feedback');
         
-        if (!answerInput || !feedback) return;
+        if (!answerInput || !feedback || !this.currentQuizWord) return;
 
         const userAnswer = answerInput.value.trim();
-        const correctAnswer = answerInput.dataset.correctAnswer;
+        const correctAnswer = this.currentQuizWord.translation.toLowerCase();
 
         this.state.stats.totalAnswers++;
 
@@ -323,7 +344,7 @@ class GurukulamApp {
             this.state.stats.streak++;
             this.showAchievement("Correct Answer! 🎯");
         } else {
-            feedback.textContent = `Incorrect. The correct answer is: ${correctAnswer}`;
+            feedback.textContent = `Incorrect. The correct answer is: ${this.currentQuizWord.translation}`;
             feedback.className = "feedback incorrect show";
             this.state.stats.streak = 0;
         }
@@ -364,6 +385,11 @@ class GurukulamApp {
      * Display current story
      */
     displayStory() {
+        if (!stories || stories.length === 0) {
+            console.error('No stories available');
+            return;
+        }
+
         const story = stories[this.state.currentStoryIndex] || stories[0];
         
         const storyTitle = document.getElementById('storyTitle');
@@ -379,6 +405,8 @@ class GurukulamApp {
      * Go to next story
      */
     nextStory() {
+        if (!stories || stories.length === 0) return;
+        
         this.state.currentStoryIndex = (this.state.currentStoryIndex + 1) % stories.length;
         this.displayStory();
     }
@@ -387,10 +415,13 @@ class GurukulamApp {
      * Speak current story
      */
     speakStory() {
+        if (!stories || stories.length === 0) return;
+        
         const story = stories[this.state.currentStoryIndex] || stories[0];
         const text = `${story.title}. ${story.content}. ${story.moral}`;
         
         if ('speechSynthesis' in window) {
+            speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.rate = 0.8;
             speechSynthesis.speak(utterance);
@@ -403,16 +434,23 @@ class GurukulamApp {
     toggleAutoplay() {
         this.state.isAutoplay = !this.state.isAutoplay;
         
-        const btn = event?.target;
+        // Find the autoplay button
+        const autoplayBtns = document.querySelectorAll('button');
+        let autoplayBtn = null;
+        autoplayBtns.forEach(btn => {
+            if (btn.textContent.includes('Auto Play') || btn.textContent.includes('Pause Auto')) {
+                autoplayBtn = btn;
+            }
+        });
         
         if (this.state.isAutoplay) {
-            if (btn) btn.textContent = '⏸️ Pause Auto';
+            if (autoplayBtn) autoplayBtn.textContent = '⏸️ Pause Auto';
             this.state.autoplayInterval = setInterval(() => {
                 this.nextWord();
                 setTimeout(() => this.speakWord(), 500);
             }, 4000);
         } else {
-            if (btn) btn.textContent = '⏯️ Auto Play';
+            if (autoplayBtn) autoplayBtn.textContent = '⏯️ Auto Play';
             if (this.state.autoplayInterval) {
                 clearInterval(this.state.autoplayInterval);
                 this.state.autoplayInterval = null;
@@ -483,16 +521,12 @@ class GurukulamApp {
     }
 
     /**
-     * Save progress to localStorage (fallback if StorageUtils not available)
+     * Save progress to localStorage
      */
     saveProgress() {
         this.endSession();
         try {
-            if (typeof StorageUtils !== 'undefined') {
-                StorageUtils.save(this.storageKey, this.state);
-            } else {
-                localStorage.setItem(this.storageKey, JSON.stringify(this.state));
-            }
+            localStorage.setItem(this.storageKey, JSON.stringify(this.state));
         } catch (error) {
             console.log('Progress save failed:', error);
         }
@@ -500,17 +534,12 @@ class GurukulamApp {
     }
 
     /**
-     * Load progress from localStorage (fallback if StorageUtils not available)
+     * Load progress from localStorage
      */
     loadProgress() {
         try {
-            let savedState;
-            if (typeof StorageUtils !== 'undefined') {
-                savedState = StorageUtils.load(this.storageKey);
-            } else {
-                const item = localStorage.getItem(this.storageKey);
-                savedState = item ? JSON.parse(item) : null;
-            }
+            const item = localStorage.getItem(this.storageKey);
+            const savedState = item ? JSON.parse(item) : null;
             
             if (savedState) {
                 // Merge saved state with current state
@@ -560,6 +589,16 @@ function toggleAutoplay() {
 document.addEventListener('DOMContentLoaded', () => {
     // Wait a bit for other scripts to load
     setTimeout(() => {
+        // Check if required data is loaded
+        if (typeof vocabularyData === 'undefined') {
+            console.error('vocabularyData not loaded');
+            return;
+        }
+        if (typeof stories === 'undefined') {
+            console.error('stories not loaded');
+            return;
+        }
+        
         window.app = new GurukulamApp();
     }, 100);
 });
